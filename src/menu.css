@@ -1,0 +1,60 @@
+body {
+	height: 100vh;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: Arial, sans-serif;
+	background: #fff;
+}
+
+.navbar {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 5rem;
+	display: flex;
+	justify-content: flex-end;
+	background: linear-gradient(135deg, #e0c2ff, #9c39ff);
+}
+
+.logo {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0 auto;
+	order: -1;
+
+	font-family: "Pacifico", serif;
+	font-size: 2.5rem;
+
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	transition: all 0.1s;
+}
+
+.logo:hover {
+	font-size: 2.7rem;
+}
+
+.navbar-button {
+	width: 5rem;
+	padding: 1rem;
+	font-size: 2rem;
+	color: #000;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	transition: all 0.1s;
+}
+
+.navbar-button:hover {
+	font-size: 2.5rem;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+}
