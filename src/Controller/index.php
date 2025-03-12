@@ -1,19 +1,28 @@
 <?php
-session_start();
+require(__DIR__ . '/config.php');
 
+$db = new DatabaseManager;
 $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$username = $_POST['username'];
-	$password = $_POST['password'];
-
-	if ($username == 'admin' && $password == 'password') {
-		header("Location: menu.php");
-		exit();
-	} else {
-		$_SESSION['error_message'] = "Invalid username or password.";
-		header("Location: index.php");
-		exit();
+	if (isset($_POST['username']) && isset($_POST['password'])){
+		$userID = $db->getID($_POST['username']);
+		if ($userID){
+			if ($db->checkPassword($userID[0][0], $_POST['password'])){
+				header("Location: menu.php");
+				exit();
+			}
+			else {
+				$_SESSION['error_message'] = "Sorry, your password is not correct. Please retry.";
+				header("Location: index.php");
+				exit();
+			}
+		}
+		else {
+			$_SESSION['error_message'] = "Sorry, your username is not correct. Please retry.";
+			header("Location: index.php");
+			exit();
+		}
 	}
 }
 

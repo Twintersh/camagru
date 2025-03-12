@@ -1,3 +1,12 @@
+<?php
+	require(__DIR__ . '/config.php');
+	if (!isset($_SESSION['userId'])) {
+		die("Access denied. Please log in.");
+	}
+	$db = new DatabaseManager;
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +28,7 @@
 	<nav class="navbar">
 		<button class="logo" aria-label="Home">Camagru</button>
 		<button class="navbar-button" aria-label="Take photo">📷</button>
+		<?php echo $db->getUser($_SESSION["userId"])[0][0] ?>
 	</nav>
 
 	<footer class="footer">
