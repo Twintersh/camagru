@@ -17,6 +17,14 @@ body {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.txt h1 {
+	margin-bottom: 1.5rem;
+	font-family: "Pacifico", serif;
+	font-size: 4rem;
+	color: #333;
+	text-align: center;
+}
+
 .login-form h1 {
 	margin-bottom: 1.5rem;
 	font-family: "Pacifico", serif;

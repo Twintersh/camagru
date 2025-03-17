@@ -1,6 +1,5 @@
 <?php
 require(__DIR__ . '/config.php');
-require(__DIR__ . '/utils.php');
 $error_message = '';
 
 function isValidPassword($password) {
@@ -28,15 +27,11 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["emai
 		$_SESSION["error_message"] = 'The password must be 8 characters long with at least one number.';
 	}
 	elseif ($db->createUser($_POST["username"], $_POST["password"], $_POST["email"])){
-		var_dump($_POST["username"]);
-		var_dump($db->getID($_POST["username"]));
-		var_dump($db->getID($_POST["username"])[0]);
-		var_dump($db->getID($_POST["username"])[0][0]);
 		if ($db->getID($_POST["username"])[0][0]){
 			$_SESSION["userId"] = $db->getID($_POST["username"])[0][0];
-			// sendMail($_POST["email"], $_POST["username"],
-			// "object test",
-			// "content test");
+			sendMail($_POST["email"], $_POST["username"],
+			"Camagru Verification Mail",
+			"localhost:8000/checkmail.php");
 			header("location: menu.php");
 			exit();
 		}

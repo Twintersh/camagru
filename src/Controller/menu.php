@@ -1,7 +1,13 @@
 <?php
 	require(__DIR__ . '/config.php');
+
+	$db = new DatabaseManager;
+
 	if (!isset($_SESSION['userId'])) {
 		die("Access denied. Please log in.");
+	}
+	if (!$db->checkMailVerif($_SESSION['userId'])) {
+		die("You were successfully Registered ! Please check your email for verification :)");
 	}
 	$db = new DatabaseManager;
 ?>

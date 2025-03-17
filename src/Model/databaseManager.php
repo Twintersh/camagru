@@ -59,5 +59,9 @@ class DatabaseManager {
 		$hashedPass = $this->execSqlQuery("SELECT password FROM users WHERE id = ?", [$userID])[0][0];
 		return password_verify($password, $hashedPass);
 	}
+
+	function checkMailVerif($userID){
+		return $this->execSqlQuery("SELECT verified FROM users WHERE id = ?", [$userID]);
+	}
 }
 ?>
