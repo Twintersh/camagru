@@ -61,7 +61,18 @@ class DatabaseManager {
 	}
 
 	function checkMailVerif($userID){
-		return $this->execSqlQuery("SELECT verified FROM users WHERE id = ?", [$userID]);
+		return $this->execSqlQuery("SELECT verified FROM tokens WHERE userID = ?", [$userID]);
+	}
+
+	function createToken($userID){
+		return $this->execSqlQuery("INSERT INTO tokens (userID) VALUES (?)", [$userID]);
+	}
+
+	function getToken($userID){
+		return $this->execSqlQuery("SELECT userID FROM tokens WHERE userID = ?", [$userID]);
+		if ($this->checkMailVerif($userID))
+			// peut etre qu'il vaut mieux return une exception
+			return false;
 	}
 }
 ?>
