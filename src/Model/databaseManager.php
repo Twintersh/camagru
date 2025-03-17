@@ -69,10 +69,11 @@ class DatabaseManager {
 	}
 
 	function getToken($userID){
-		return $this->execSqlQuery("SELECT userID FROM tokens WHERE userID = ?", [$userID]);
+		$verifToken = $this->execSqlQuery("SELECT verifToken FROM tokens WHERE userID = ?", [$userID]);
 		if ($this->checkMailVerif($userID))
-			// peut etre qu'il vaut mieux return une exception
 			return false;
+		// peut etre qu'il vaut mieux return une exception
+		return $verifToken;
 	}
 }
 ?>
