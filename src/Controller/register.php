@@ -1,4 +1,4 @@
-<?php
+ <?php
 require(__DIR__ . '/config.php');
 $error_message = '';
 
@@ -29,9 +29,11 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["emai
 	elseif ($db->createUser($_POST["username"], $_POST["password"], $_POST["email"])){
 		if ($db->getID($_POST["username"])[0][0]){
 			$_SESSION["userId"] = $db->getID($_POST["username"])[0][0];
+			$db->createToken($_SESSION["userId"]);
+			$token = $db->getToken($_SESSION["userId"]);
 			sendMail($_POST["email"], $_POST["username"],
 			"Camagru Verification Mail",
-			"localhost:8000/checkmail.php");
+			"http://localhost:8000/checkemail.php?token=$token");
 			header("location: menu.php");
 			exit();
 		}

@@ -6,7 +6,7 @@
 	if (!isset($_SESSION['userId'])) {
 		die("Access denied. Please log in.");
 	}
-	if (!$db->checkMailVerif($_SESSION['userId'])) {
+	if (!$db->checkMailVerif($_SESSION['userId'])[0][0]) {
 		die("You were successfully Registered ! Please check your email for verification :)");
 	}
 	$db = new DatabaseManager;

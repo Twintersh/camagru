@@ -1,5 +1,15 @@
 <?php
-require(__DIR__ . '/config.php')
+$db = new DatabaseManager;
+require(__DIR__ . '/config.php');
+// if (isset($_GET['token'])){
+	$UserToken = $db->getToken($_SESSION["userId"]);
+	if ($UserToken == $_GET['token'])
+	{
+		header("location: menu.php");
+		exit();
+	}
+// }
+
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +27,7 @@ require(__DIR__ . '/config.php')
 	<div class="login-container">
 			<h1 class='txt'>Camagru</h1>
 			<p>You're one step ahead!</p>
-			<button type="submit" class="login-button">Verif your email</button>
+			<button type="submit" class="login-button">Verify your email</button>
 	</div>
 	<footer class="footer">
 		<p>Made by twinters</p>
