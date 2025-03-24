@@ -39,8 +39,10 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["emai
 		}
 		exit();
 	}
-	header("Location: register.php");
-	exit();
+	else {
+		header("Location: register.php");
+		exit();
+	}
 }
 
 
