@@ -7,7 +7,8 @@
 	}
 	$mailVerif = $db->checkMailVerif($_SESSION['userId']);
 	if (!$mailVerif) {
-		die("You were successfully Registered ! Please check your email for verification :)");
+		header("Location: notverified.php");
+		exit();
 	}
 	else if (gettype($mailVerif) == "array" && count($mailVerif) == 2) {
 		die($mailVerif[1]);
