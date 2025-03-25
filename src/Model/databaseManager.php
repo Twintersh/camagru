@@ -52,7 +52,12 @@ class DatabaseManager {
 	}
 
 	function getID($username) {
-		return $this->execSqlQuery("SELECT id FROM users WHERE username = ?", [$username]);
+		$userID = $this->execSqlQuery("SELECT id FROM users WHERE username = ?", [$username]);
+		if (count($userID) > 0 && count($userID[0]) > 0 && isset($userID[0]['id'])){
+			return $userID[0]['id'];
+		}
+		return $userID;
+
 	}
 
 	function checkPassword($userID, $password){
@@ -61,11 +66,20 @@ class DatabaseManager {
 	}
 
 	function checkMailVerif($userID){
-		return $this->execSqlQuery("SELECT verified FROM tokens WHERE userID = ?", [$userID]);
+		$verified = $this->execSqlQuery("SELECT verified FROM tokens WHERE userID = ?", [$userID]);
+		if (gettype($verified) == "array" && count($verified) > 0 && gettype($verified[0]) == "array" && count($verified[0]) > 0 && isset($verified[0]['verified'])){
+			return $verified[0]['verified'];
+		}
+		return $verified;
 	}
 
 	function createToken($userID){
+		$usertoken = $this->execSqlQuery("SELECT * FROM tokens WHERE userID = ?", [$userID]);
+		if (count($usertoken) > 0){
+			return false;
+		}
 		return $this->execSqlQuery("INSERT INTO tokens (userID) VALUES (?)", [$userID]);
+
 	}
 
 	function getToken($userID){
@@ -76,9 +90,22 @@ class DatabaseManager {
 		return $data[0]['veriftoken'];
 	}
 
-	function verifAccount($userID){
-		$data = $this->execSqlQuery("SELECT * FROM tokens WHERE userID = ?", [$userID]);
-		$data[0]['verified'] == true;
+	function verifAccount($token){
+		$data = $this->execSqlQuery("UPDATE tokens SET verified = TRUE WHERE verifToken = ?", [$token]);
+		$userID  = $this->execSqlQuery("SELECT userID FROM tokens WHERE verifToken = ?", [$token]);
+		if (count($userID) > 0 && count($userID[0]) > 0 && isset($userID[0]['userid'])){
+			return $userID[0]['userid'];
+		}
+		return $userID;
 	}
+
+	function checkEmailExists($email){
+		$data = $this->execSqlQuery("SELECT email FROM users WHERE email = ?", [$email]);
+		if (count($data) > 0){
+			return true;
+		}
+		return false;
+	}
+
 }
 ?>

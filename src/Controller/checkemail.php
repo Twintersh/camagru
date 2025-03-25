@@ -1,14 +1,5 @@
 <?php
-$db = new DatabaseManager;
 require(__DIR__ . '/config.php');
-// if (isset($_GET['token'])){
-	$UserToken = $db->getToken($_SESSION["userId"]);
-	if ($UserToken == $_GET['token'])
-	{
-		header("location: menu.php");
-		exit();
-	}
-// }
 
 ?>
 
@@ -24,11 +15,12 @@ require(__DIR__ . '/config.php');
 	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class="login-container">
+	<form class="login-container" action="verifmail.php" method="POST">
 			<h1 class='txt'>Camagru</h1>
 			<p>You're one step ahead!</p>
-			<button type="submit" class="login-button">Verify your email</button>
-	</div>
+			<input name="token" type="text" class="hidden" value="<?php echo isset($_GET["token"]) ? $_GET["token"] : "" ?>"/>
+			<button type="submit" class="login-button" name="bouton">Verify your email</button>
+	</form>
 	<footer class="footer">
 		<p>Made by twinters</p>
 	</footer>

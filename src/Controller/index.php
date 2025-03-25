@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (isset($_POST['username']) && isset($_POST['password'])){
 		$userID = $db->getID($_POST['username']);
 		if ($userID){
-			if ($db->checkPassword($userID[0][0], $_POST['password'])){
+			if ($db->checkPassword($userID, $_POST['password'])){
 				header("Location: menu.php");
 				exit();
 			}
@@ -45,7 +45,7 @@ if (isset($_SESSION['error_message'])) {
 </head>
 <body>
 	<div class="login-container">
-		<form class="login-form" action="index.php" method="POST">
+		<form class="login-form" method="POST">
 			<h1 class="txt">Camagru</h1>
 			<div class="input-group">
 				<label for="username">Username</label>

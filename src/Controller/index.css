@@ -8,6 +8,10 @@ body {
 	background: linear-gradient(135deg, #9c39ff, #fff);
 }
 
+.hidden {
+	display : none;
+}
+
 .login-container {
 	width: 100%;
 	max-width: 400px;

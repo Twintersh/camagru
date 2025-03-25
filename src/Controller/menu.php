@@ -2,12 +2,15 @@
 	require(__DIR__ . '/config.php');
 
 	$db = new DatabaseManager;
-
-	if (!isset($_SESSION['userId'])) {
+	if (!isset($_SESSION['userId']) || !$_SESSION["userId"]) {
 		die("Access denied. Please log in.");
 	}
-	if (!$db->checkMailVerif($_SESSION['userId'])[0][0]) {
+	$mailVerif = $db->checkMailVerif($_SESSION['userId']);
+	if (!$mailVerif) {
 		die("You were successfully Registered ! Please check your email for verification :)");
+	}
+	else if (gettype($mailVerif) == "array" && count($mailVerif) == 2) {
+		die($mailVerif[1]);
 	}
 	$db = new DatabaseManager;
 ?>
