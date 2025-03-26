@@ -57,7 +57,14 @@ class DatabaseManager {
 			return $userID[0]['id'];
 		}
 		return $userID;
+	}
 
+	function getIdbyEmail($email){
+		$userID = $this->execSqlQuery("SELECT id FROM users WHERE email = ?", [$email]);
+		if (count($userID) > 0 && count($userID[0]) > 0 && isset($userID[0]['id'])){
+			return $userID[0]['id'];
+		}
+		return $userID;
 	}
 
 	function checkPassword($userID, $password){
@@ -75,19 +82,32 @@ class DatabaseManager {
 
 	function createToken($userID){
 		$usertoken = $this->execSqlQuery("SELECT * FROM tokens WHERE userID = ?", [$userID]);
-		if (count($usertoken) > 0){
-			return false;
+		if (is_array($usertoken) && count($usertoken) > 0 && gettype($usertoken[0]) == 'boolean' && $usertoken[0] == false) {
+			return $usertoken;
+		}
+		$userverifiedTokens = $this->execSqlQuery("SELECT * FROM tokens WHERE userID = ? AND verified = TRUE", [$userID]);
+		if (count($usertoken) > 0 && count($usertoken) != count($userverifiedTokens)){
+			foreach ($usertoken as $token) {
+				if (!$token['verified']) {
+					return $token;
+				}
+			}
 		}
 		return $this->execSqlQuery("INSERT INTO tokens (userID) VALUES (?)", [$userID]);
 
 	}
 
 	function getToken($userID){
-		$data = $this->execSqlQuery("SELECT * FROM tokens WHERE userID = ?", [$userID]);
-		if ($data[0]['verified'] == true){
+		$tokens = $this->execSqlQuery("SELECT * FROM tokens WHERE userID = ?", [$userID]);
+		if (!is_array($tokens) || count($tokens) === 0) {
 			return false;
 		}
-		return $data[0]['veriftoken'];
+		foreach ($tokens as $token) {
+			if (!$token['verified']) {
+				return $token['veriftoken'];
+			}
+		}
+		return false;
 	}
 
 	function verifAccount($token){
@@ -107,5 +127,12 @@ class DatabaseManager {
 		return false;
 	}
 
+	function changePassword($password, $token){
+		$userId = $this->execSqlQuery("SELECT userID from tokens WHERE verifToken = ?", [$token]);
+		$hashedPass = password_hash($password, PASSWORD_BCRYPT);
+		$data = $this->execSqlQuery("UPDATE users SET password = ? WHERE id = ?", [$password, $userId[0]["userid"]]);
+		var_dump($password);
+		return $data;
+	}
 }
 ?>

@@ -3,13 +3,13 @@ require(__DIR__ . '/config.php');
 require(__DIR__ . '/utils.php');
 
 function isValidPassword($password) {
-    if (strlen($password) < 8) {
-        return false;
-    }
-    if (!preg_match('/\d/', $password)) {
-        return false;
-    }
-    return true;
+	if (strlen($password) < 8) {
+		return false;
+	}
+	if (!preg_match('/\d/', $password)) {
+		return false;
+	}
+	return true;
 }
 
 $db = new DatabaseManager;

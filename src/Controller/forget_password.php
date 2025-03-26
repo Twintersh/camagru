@@ -1,7 +1,20 @@
 <?php
+require(__DIR__ . '/config.php');
+require(__DIR__ . '/utils.php');
+
+$db = new DatabaseManager;
 
 if (isset($_POST["email"])){
-
+	$userID = $db->getIdbyEmail($_POST["email"]);
+	// verifier userID
+	$chibre = $db->createToken($userID);
+	$token = $db->getToken($userID);
+	var_dump($chibre);
+	var_dump($token);
+	sendMail($_POST["email"], 'gros golem',
+	"Reset Password",
+	"http://localhost:8000/fieldpassword.php?token=$token");
+	echo "gg bro wp";
 }
 
 
@@ -24,7 +37,7 @@ if (isset($_POST["email"])){
 			<h1 class="txt">Camagru</h1>
             <div class="input-group">
                 <label for="email">Please enter your email:</label>
-                <input type="text" id="email" name="email" placeholder="Email" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
             </div>
             <button type="submit" class="login-button">Reset password</button>
 			<div class="form-footer">

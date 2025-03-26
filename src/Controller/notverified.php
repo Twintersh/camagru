@@ -1,3 +1,11 @@
+<?php
+	require(__DIR__ . '/config.php');
+	if (!isset($_SESSION["notverified"])){
+		header("location: index.php");
+		exit();
+	}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +20,8 @@
 <body>
 	<form class="login-container" action="verifmail.php" method="POST">
 			<h1 class='txt'>Camagru</h1>
-			<p>Your account is not verified yet ! Please check your emails 💌</p>
+			<p style="text-align: center;"><?php echo $_SESSION["notverified"]; ?>
+			</p>
 	</form>
 	<footer class="footer">
 		<p>Made by twinters</p>

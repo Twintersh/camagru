@@ -3,10 +3,13 @@
 
 	$db = new DatabaseManager;
 	if (!isset($_SESSION['userId']) || !$_SESSION["userId"]) {
-		die("Access denied. Please log in.");
+		$_SESSION["notverified"] = "Access denied. Please log in.";
+		header("Location: notverified.php");
+		exit();
 	}
 	$mailVerif = $db->checkMailVerif($_SESSION['userId']);
 	if (!$mailVerif) {
+		$_SESSION["notverified"] = "Your account is not verified yet ! Please check your emails";
 		header("Location: notverified.php");
 		exit();
 	}

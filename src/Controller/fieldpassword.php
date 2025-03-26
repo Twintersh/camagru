@@ -4,23 +4,32 @@ require(__DIR__ . '/config.php');
 $db = new DatabaseManager;
 $error_message = '';
 
+function isValidPassword($password) {
+	if (strlen($password) < 8) {
+		return false;
+	}
+	if (!preg_match('/\d/', $password)) {
+		return false;
+	}
+	return true;
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	if (isset($_POST['username']) && isset($_POST['password'])){
-		$userID = $db->getID($_POST['username']);
-		if ($userID){
-			if ($db->checkPassword($userID, $_POST['password'])){
-				header("Location: menu.php");
+	if (isset($_POST['confirmpassword']) && isset($_POST['password']) && isset($_GET["token"])){
+		if ($_POST['confirmpassword'] == $_POST['password']){
+			if (!isValidPassword($_POST['password'])){
+				$_SESSION["error_message"] = 'The password must be 8 characters long with at least one number.';
+				header("Location: fieldpassword.php");
 				exit();
 			}
 			else {
-				$_SESSION['error_message'] = "Sorry, your password is not correct. Please retry.";
-				header("Location: index.php");
-				exit();
+				$db->changePassword($_POST['password'], $_GET["token"]);
 			}
 		}
 		else {
-			$_SESSION['error_message'] = "Sorry, your username is not correct. Please retry.";
-			header("Location: index.php");
+			$_SESSION['error_message'] = "Passwords don't match.";
+			header("Location: fieldpassword.php");
 			exit();
 		}
 	}
@@ -37,7 +46,7 @@ if (isset($_SESSION['error_message'])) {
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Camargu - Login</title>
+	<title>Camargu - change password</title>
 	<link rel="stylesheet" href="index.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,19 +57,18 @@ if (isset($_SESSION['error_message'])) {
 		<form class="login-form" method="POST">
 			<h1 class="txt">Camagru</h1>
 			<div class="input-group">
-				<label for="username">Username</label>
-				<input type="text" id="username" name="username" placeholder="Enter your username" required>
-			</div>
-			<div class="input-group">
 				<label for="password">Password</label>
 				<input type="apassword" id="password" name="password" placeholder="Enter your password" required>
+			</div>
+			<div class="input-group">
+				<label for="confirmpassword">Confirm password</label>
+				<input type="apassword" id="confirmpassword" name="confirmpassword" placeholder="Confirm your password" required>
 			</div>
 			<?php if ($error_message): ?>
 				<p style="color: red;"><?php echo $error_message; ?></p>
 			<?php endif; ?>
-			<button type="submit" class="login-button">Login</button>
+			<button type="submit" class="login-button">Change password</button>
 			<div class="form-footer">
-				<a href="forget_password.php" class="link">Forgot your password?</a>
 				<p>Don't have an account? <a href="register.php" class="link">Sign up</a></p>
 			</div>
 		</form>
