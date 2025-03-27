@@ -69,6 +69,7 @@ class DatabaseManager {
 
 	function checkPassword($userID, $password){
 		$hashedPass = $this->execSqlQuery("SELECT password FROM users WHERE id = ?", [$userID])[0][0];
+
 		return password_verify($password, $hashedPass);
 	}
 
@@ -130,8 +131,7 @@ class DatabaseManager {
 	function changePassword($password, $token){
 		$userId = $this->execSqlQuery("SELECT userID from tokens WHERE verifToken = ?", [$token]);
 		$hashedPass = password_hash($password, PASSWORD_BCRYPT);
-		$data = $this->execSqlQuery("UPDATE users SET password = ? WHERE id = ?", [$password, $userId[0]["userid"]]);
-		var_dump($password);
+		$data = $this->execSqlQuery("UPDATE users SET password = ? WHERE id = ?", [$hashedPass, $userId[0]["userid"]]);
 		return $data;
 	}
 }

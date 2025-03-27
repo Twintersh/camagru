@@ -1,8 +1,5 @@
-forgot password steps :
-[X] créer la page avec 2 input
-[X] créer le token par email
-[X] send token mail + redirection vers page des 2 inputs
-[X] check la correspondance des deux entrées
-[X] créer la fonction pour modifier le password dans la db
-[X] modifier le password dans la db
-[] fumer une clope
+feed:
+[] trouver une base html sur laquelle construire le feed
+[] créer le modèle d'un post dans la DB
+[] pouvoir publier une photo depuis les fichiers de son ordinateur
+[] récupérer et afficher les posts en fonction de la date d'ajout

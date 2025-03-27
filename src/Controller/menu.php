@@ -3,13 +3,13 @@
 
 	$db = new DatabaseManager;
 	if (!isset($_SESSION['userId']) || !$_SESSION["userId"]) {
-		$_SESSION["notverified"] = "Access denied. Please log in.";
+		$_SESSION["message"] = 'Access denied. Please <a href="index.php" class="link">log in</a>.';
 		header("Location: notverified.php");
 		exit();
 	}
 	$mailVerif = $db->checkMailVerif($_SESSION['userId']);
 	if (!$mailVerif) {
-		$_SESSION["notverified"] = "Your account is not verified yet ! Please check your emails";
+		$_SESSION["message"] = "Your account is not verified yet ! Please check your emails";
 		header("Location: notverified.php");
 		exit();
 	}
@@ -45,7 +45,7 @@
 	</nav>
 
 	<footer class="footer">
-		<p>Made by twinters</p>
+		<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 	</footer>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 	require(__DIR__ . '/config.php');
-	if (!isset($_SESSION["notverified"])){
+	if (!isset($_SESSION["message"])){
 		header("location: index.php");
 		exit();
 	}
@@ -20,11 +20,11 @@
 <body>
 	<form class="login-container" action="verifmail.php" method="POST">
 			<h1 class='txt'>Camagru</h1>
-			<p style="text-align: center;"><?php echo $_SESSION["notverified"]; ?>
+			<p style="text-align: center;"><?php echo $_SESSION["message"]; ?>
 			</p>
 	</form>
 	<footer class="footer">
-		<p>Made by twinters</p>
+		<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 	</footer>
 </body>
 </html>

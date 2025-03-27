@@ -3,6 +3,7 @@ require(__DIR__ . '/config.php');
 
 $db = new DatabaseManager;
 $error_message = '';
+$success_message = '';
 
 function isValidPassword($password) {
 	if (strlen($password) < 8) {
@@ -14,22 +15,31 @@ function isValidPassword($password) {
 	return true;
 }
 
+if (!isset($_GET['token'])){
+	header("Location: index.php");
+	exit();
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	if (isset($_POST['confirmpassword']) && isset($_POST['password']) && isset($_GET["token"])){
+	if (isset($_POST['confirmpassword']) && isset($_POST['password']) && isset($_GET["token"]))
+	{
 		if ($_POST['confirmpassword'] == $_POST['password']){
 			if (!isValidPassword($_POST['password'])){
 				$_SESSION["error_message"] = 'The password must be 8 characters long with at least one number.';
-				header("Location: fieldpassword.php");
+				header("Location: fieldpassword.php?token=" . $_GET['token']);
 				exit();
 			}
 			else {
 				$db->changePassword($_POST['password'], $_GET["token"]);
+				$_SESSION["success_message"] = 'Password had been changed successfuly ! You can now connect.';
+				header("Location: index.php");
+				exit();
 			}
 		}
 		else {
 			$_SESSION['error_message'] = "Passwords don't match.";
-			header("Location: fieldpassword.php");
+			header("Location: fieldpassword.php?token=" . $_GET['token']);
 			exit();
 		}
 	}
@@ -37,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if (isset($_SESSION['error_message'])) {
 	$error_message = $_SESSION['error_message'];
-	unset($_SESSION['error_message']); // Clear error after showing it
+	unset($_SESSION['error_message']);
 }
 
 ?>
@@ -58,23 +68,23 @@ if (isset($_SESSION['error_message'])) {
 			<h1 class="txt">Camagru</h1>
 			<div class="input-group">
 				<label for="password">Password</label>
-				<input type="apassword" id="password" name="password" placeholder="Enter your password" required>
+				<input type="password" id="password" name="password" placeholder="Enter your password" required>
 			</div>
 			<div class="input-group">
 				<label for="confirmpassword">Confirm password</label>
-				<input type="apassword" id="confirmpassword" name="confirmpassword" placeholder="Confirm your password" required>
+				<input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm your password" required>
 			</div>
 			<?php if ($error_message): ?>
 				<p style="color: red;"><?php echo $error_message; ?></p>
 			<?php endif; ?>
 			<button type="submit" class="login-button">Change password</button>
 			<div class="form-footer">
-				<p>Don't have an account? <a href="register.php" class="link">Sign up</a></p>
+				<p>Want to <a href="index.php" class="link">Log in</a>?</p>
 			</div>
 		</form>
 	</div>
 	<footer class="footer">
-		<p>Made by twinters</p>
+		<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 	</footer>
 </body>
 </html>

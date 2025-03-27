@@ -33,7 +33,7 @@ if (isset($_SESSION['error_message'])) {
 			</div>
 			<div class="input-group">
 				<label for="password">Password</label>
-				<input type="apassword" id="password" name="password" placeholder="Enter your password" required>
+				<input type="password" id="password" name="password" placeholder="Enter your password" required>
 			</div>
 			<?php if ($error_message): ?>
 				<p style="color: red;"><?php echo $error_message; ?></p>
@@ -45,7 +45,7 @@ if (isset($_SESSION['error_message'])) {
 		</form>
 	</div>
 	<footer class="footer">
-		<p>Made by twinters</p>
+		<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 	</footer>
 </body>
 </html>

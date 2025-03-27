@@ -22,7 +22,7 @@ require(__DIR__ . '/config.php');
 			<button type="submit" class="login-button" name="bouton">Verify your email</button>
 	</form>
 	<footer class="footer">
-		<p>Made by twinters</p>
+		<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 	</footer>
 </body>
 </html>
