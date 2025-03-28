@@ -7,6 +7,16 @@ use PHPMailer\PHPMailer\Exception;
 // require 'vendor/autoload.php';
 // use PHPMailer\PHPMailer\PHPMailer;
 
+function isValidPassword($password) {
+	if (strlen($password) < 8 || strlen($password) > 256) {
+		return false;
+	}
+	if (!preg_match('/\d/', $password)) {
+		return false;
+	}
+	return true;
+}
+
 function sendMail($recipientEmail, $username, $subject, $content)
 {
     $mail = new PHPMailer(true);

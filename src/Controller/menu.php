@@ -43,7 +43,64 @@
 		<button class="navbar-button" aria-label="Take photo">📷</button>
 		<?php echo $db->getUser($_SESSION["userId"])[0][0] ?>
 	</nav>
+	<div class="feed-container">
+        <div class="post">
+            <img src="https://i0.wp.com/beyondthebeach.fr//app/uploads/2021/04/balade-privee-en-mer-coucher-de-soleil-5.jpg?fit=960%2C1280&ssl=1" alt="Post Image">
+            <div class="post-content">
+                <p class="username">@user1</p>
+                <p>Magnifique coucher de soleil 🌅</p>
+            </div>
+            <div class="interactions">
+                <button class="like-btn">❤️ Like</button>
+                <button class="comment-btn">💬 Commenter</button>
+            </div>
+        </div>
 
+        <div class="post">
+            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
+            <div class="post-content">
+                <p class="username">@user2</p>
+                <p>Voyage à la montagne 🏔️</p>
+            </div>
+            <div class="interactions">
+                <button class="like-btn">❤️ Like</button>
+                <button class="comment-btn">💬 Commenter</button>
+            </div>
+        </div>
+        <div class="post">
+            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
+            <div class="post-content">
+                <p class="username">@user2</p>
+                <p>Voyage à la montagne 🏔️</p>
+            </div>
+            <div class="interactions">
+                <button class="like-btn">❤️ Like</button>
+                <button class="comment-btn">💬 Commenter</button>
+            </div>
+        </div>
+        <div class="post">
+            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
+            <div class="post-content">
+                <p class="username">@user2</p>
+                <p>Voyage à la montagne 🏔️</p>
+            </div>
+            <div class="interactions">
+                <button class="like-btn">❤️ Like</button>
+                <button class="comment-btn">💬 Commenter</button>
+            </div>
+        </div>
+        <div class="post">
+            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
+            <div class="post-content">
+                <p class="username">@user2</p>
+                <p>Voyage à la montagne 🏔️</p>
+            </div>
+            <div class="interactions">
+                <button class="like-btn">❤️ Like</button>
+                <button class="comment-btn">💬 Commenter</button>
+            </div>
+        </div>
+    </div>
 	<footer class="footer">
 		<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 	</footer>

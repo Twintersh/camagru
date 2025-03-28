@@ -5,16 +5,6 @@ $db = new DatabaseManager;
 $error_message = '';
 $success_message = '';
 
-function isValidPassword($password) {
-	if (strlen($password) < 8) {
-		return false;
-	}
-	if (!preg_match('/\d/', $password)) {
-		return false;
-	}
-	return true;
-}
-
 if (!isset($_GET['token'])){
 	header("Location: index.php");
 	exit();
