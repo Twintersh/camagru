@@ -43,9 +43,20 @@
 		<button class="navbar-button" aria-label="Take photo">📷</button>
 		<?php echo $db->getUser($_SESSION["userId"])[0][0] ?>
 	</nav>
+	<div class="bubble bubble-1">
+	</div>
+	<div class="bubble bubble-2">
+
+	</div>
 	<div class="feed-container">
+		<div class="header-feed">
+			<h2>You <span class="color-secondary pacifico">Camagru</span> Feed</h2>
+			<p>Discover everyday new post on your camagru feed and let people know about you with posts !</p>
+		</div>
         <div class="post">
-            <img src="https://i0.wp.com/beyondthebeach.fr//app/uploads/2021/04/balade-privee-en-mer-coucher-de-soleil-5.jpg?fit=960%2C1280&ssl=1" alt="Post Image">
+			<div class="div-picture">
+				<img src="https://i0.wp.com/beyondthebeach.fr//app/uploads/2021/04/balade-privee-en-mer-coucher-de-soleil-5.jpg?fit=960%2C1280&ssl=1" alt="Post Image">
+			</div>
             <div class="post-content">
                 <p class="username">@user1</p>
                 <p>Magnifique coucher de soleil 🌅</p>
@@ -57,7 +68,9 @@
         </div>
 
         <div class="post">
-            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
+		<div class="div-picture">
+				<img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
+			</div>
             <div class="post-content">
                 <p class="username">@user2</p>
                 <p>Voyage à la montagne 🏔️</p>
