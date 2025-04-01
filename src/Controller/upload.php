@@ -3,8 +3,14 @@ require(__DIR__ . '/config.php');
 
 $db = new DatabaseManager;
 
+if (!isset($_SESSION["userID"]) || $_SESSION["userID"] == '')
+{
+	header("Location: index.php");
+	exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
-	$uploadDir = '/var/www/View/public/posts/'; // Dossier où l'image sera stockée
+	$uploadDir = '/var/www/src//public/posts/'; // Dossier où l'image sera stockée
 	$maxFileSize = 5 * 1024 * 1024; // Taille maximale du fichier : 5 Mo
 	$allowedFileTypes = ['image/jpeg', 'image/png']; // Types d'images autorisés
 
@@ -48,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 	<div class="container">
 		<h2>Publier une photo</h2>
 		<form action="" method="POST" enctype="multipart/form-data">
-			<input type="file" name="image" accept="image/*" required>
+			<input type="file" name="image" accept="image/*" required>La photo a été publiée avec succès !
 			<textarea name="description" placeholder="Ajouter une description..."></textarea>
 			<button type="submit">Publier</button>
 		</form>

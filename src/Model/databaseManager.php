@@ -138,5 +138,9 @@ class DatabaseManager {
 	function saveImage($userID, $imagePath, $description){
 		$this->execSqlQuery("INSERT INTO picure (authorID, photo_url, description) VALUES (?, ?, ?)", [$userID, $imagePath, $description]);
 	}
+
+	function getLastImageSaved(){
+		return $this->execSqlQuery("SELECT photo_url FROM pictures ORDER BY created_at DESC LIMIT 1", []);
+	}
 }
 ?>

@@ -1,3 +1,7 @@
+volumes:
+  shared_uploads:
+
+
 services:
 
   db:
@@ -8,7 +12,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - "/var/www/View/public/posts"
+      - shared_uploads:/var/www/src/View/public/posts
 
   php:
     image: camagru
@@ -18,6 +22,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/var/www/
+      - shared_uploads:/var/www/src/View/public/posts
     depends_on:
       - db
     env_file: .env
@@ -28,3 +33,4 @@ services:
                 target: /var/www
             -   action: rebuild
                 path: .
+

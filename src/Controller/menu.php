@@ -2,15 +2,30 @@
 	require(__DIR__ . '/config.php');
 
 	$db = new DatabaseManager;
-	if (!isset($_SESSION['userId']) || !$_SESSION["userID"]) {
+	if (!isset($_SESSION["userID"]) || !$_SESSION["userID"]) {
 		$_SESSION["message"] = 'Access denied. Please <a href="index.php" class="link">log in</a>.';
 		header("Location: notverified.php");
 		exit();
 	}
-	$mailVerif = $db->checkMailVerif($_SESSION['userId']);
+	$mailVerif = $db->checkMailVerif($_SESSION["userID"]);
 	if (!$mailVerif) {
 		$_SESSION["message"] = "Your account is not verified yet ! Please check your emails";
 		header("Location: notverified.php");
+		exit();
+	}
+	else if (gettype($mailVerif) == "array" && count($mailVerif) == 2) {
+		die($mailVerif[1]);
+	}
+	echo $db->getLastImageSaved();
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Camagru - Photo sharing
 		exit();
 	}
 	else if (gettype($mailVerif) == "array" && count($mailVerif) == 2) {
@@ -55,7 +70,7 @@
 		</div>
         <div class="post">
 			<div class="div-picture">
-				<img src="https://i0.wp.com/beyondthebeach.fr//app/uploads/2021/04/balade-privee-en-mer-coucher-de-soleil-5.jpg?fit=960%2C1280&ssl=1" alt="Post Image">
+				<img src="<?php $db->getLastImageSaved() ?>" alt="Post Image">
 			</div>
             <div class="post-content">
                 <p class="username">@user1</p>
