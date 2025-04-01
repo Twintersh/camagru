@@ -2,7 +2,7 @@
 	require(__DIR__ . '/config.php');
 
 	$db = new DatabaseManager;
-	if (!isset($_SESSION['userId']) || !$_SESSION["userId"]) {
+	if (!isset($_SESSION['userId']) || !$_SESSION["userID"]) {
 		$_SESSION["message"] = 'Access denied. Please <a href="index.php" class="link">log in</a>.';
 		header("Location: notverified.php");
 		exit();
@@ -35,13 +35,13 @@
 	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
 	<!-- Styles -->
-	<link rel="stylesheet" href="menu.css">
+	<link rel="stylesheet" href="style/menu.css">
 </head>
 <body>
 	<nav class="navbar">
 		<button class="logo" aria-label="Home">Camagru</button>
 		<button class="navbar-button" aria-label="Take photo">📷</button>
-		<?php echo $db->getUser($_SESSION["userId"])[0][0] ?>
+		<?php echo $db->getUser($_SESSION["userID"])[0][0] ?>
 	</nav>
 	<div class="bubble bubble-1">
 	</div>

@@ -134,5 +134,9 @@ class DatabaseManager {
 		$data = $this->execSqlQuery("UPDATE users SET password = ? WHERE id = ?", [$hashedPass, $userId[0]["userid"]]);
 		return $data;
 	}
+
+	function saveImage($userID, $imagePath, $description){
+		$this->execSqlQuery("INSERT INTO picure (authorID, photo_url, description) VALUES (?, ?, ?)", [$userID, $imagePath, $description]);
+	}
 }
 ?>

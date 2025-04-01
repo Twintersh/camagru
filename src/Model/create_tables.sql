@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS pictures (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	authorID UUID NOT NULL,
 	likes INT DEFAULT 0,
+	photo_url VARCHAR(511),
 	description VARCHAR(511)
 );
 

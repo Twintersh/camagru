@@ -39,7 +39,7 @@ if (isset($_SESSION['success_message'])) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Camargu - Forget Password</title>
-	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="style/index.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">

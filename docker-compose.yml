@@ -28,5 +28,3 @@ services:
                 target: /var/www
             -   action: rebuild
                 path: .
-
-

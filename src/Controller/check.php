@@ -21,13 +21,13 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["emai
 	}
 	elseif ($db->createUser($_POST["username"], $_POST["password"], $_POST["email"])){
 		if ($db->getID($_POST["username"])){
-			$_SESSION["userId"] = $db->getID($_POST["username"]);
-			if (!$db->createToken($_SESSION["userId"])){
+			$_SESSION["userID"] = $db->getID($_POST["username"]);
+			if (!$db->createToken($_SESSION["userID"])){
 				$_SESSION["error_message"] = 'This email is already used.';
 				header("Location: register.php");
 				exit();
 			}
-			$token = $db->getToken($_SESSION["userId"]);
+			$token = $db->getToken($_SESSION["userID"]);
 			sendMail($_POST["email"], $_POST["username"],
 			"Camagru Verification Mail",
 			"http://localhost:8000/checkemail.php?token=$token");

@@ -5,7 +5,7 @@ $db = new DatabaseManager;
 $error_message = '';
 $success_message = '';
 
-if (isset($_SESSION["userId"]))
+if (isset($_SESSION["userID"]))
 {
 	header("Location: menu.php");
 	exit();
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$userID = $db->getID($_POST['username']);
 		if ($userID){
 			if ($db->checkPassword($userID, $_POST['password'])){
-				$_SESSION["userId"] = $userID;
+				$_SESSION["userID"] = $userID;
 				header("Location: menu.php");
 				exit();
 			}
@@ -50,7 +50,7 @@ if (isset($_SESSION['success_message'])) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Camargu - Login</title>
-	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="style/index.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
