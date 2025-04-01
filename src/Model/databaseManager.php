@@ -140,7 +140,11 @@ class DatabaseManager {
 	}
 
 	function getLastImageSaved(){
-		return $this->execSqlQuery("SELECT photo_url FROM pictures ORDER BY created_at DESC LIMIT 1", []);
+		$photo_url = $this->execSqlQuery("SELECT photo_url FROM pictures ORDER BY created_at DESC LIMIT 1", []);
+		if (!gettype($photo_url) == "array" && count($photo_url) > 0 && count($photo_url[0]) > 0 && isset($photo_url[0]['photo_url'])){
+			return $photo_url[0]['photo_url'];
+		}
+		return $photo_url;
 	}
 }
 ?>
