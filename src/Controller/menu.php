@@ -70,7 +70,7 @@
 		</div>
         <div class="post">
 			<div class="div-picture">
-				<img src="<?php $db->getLastImageSaved() ?>" alt="Post Image">
+				<img src="<?= $db->getLastImageSaved() ?>" alt="Post Image">
 			</div>
             <div class="post-content">
                 <p class="username">@user1</p>

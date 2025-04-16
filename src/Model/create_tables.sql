@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS pictures (
 	authorID UUID NOT NULL,
 	likes INT DEFAULT 0,
 	photo_url VARCHAR(511),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	description VARCHAR(511)
 );
 
@@ -38,3 +39,10 @@ CREATE TABLE IF NOT EXISTS 	comments (
 	content VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO users (username, email, password)
+SELECT 'twinters', 'tom.wintersheim@gmail.com', '$2a$12$b//c7IZKs10snoaqzJ5SReG/icBoRFG79w.qk.0VQalzKNJgU29ba'
+WHERE NOT EXISTS (
+  SELECT 1 FROM users WHERE username = 'twinters'
+);
+INSERT INTO tokens (userID, verified) SELECT id, TRUE FROM users WHERE username = 'twinters';

@@ -136,15 +136,17 @@ class DatabaseManager {
 	}
 
 	function saveImage($userID, $imagePath, $description){
-		$this->execSqlQuery("INSERT INTO picure (authorID, photo_url, description) VALUES (?, ?, ?)", [$userID, $imagePath, $description]);
+		$this->execSqlQuery("INSERT INTO pictures (authorID, photo_url, description) VALUES (?, ?, ?)", [$userID, $imagePath, $description]);
+		var_dump($imagePath);
 	}
 
-	function getLastImageSaved(){
-		$photo_url = $this->execSqlQuery("SELECT photo_url FROM pictures ORDER BY created_at DESC LIMIT 1", []);
-		if (!gettype($photo_url) == "array" && count($photo_url) > 0 && count($photo_url[0]) > 0 && isset($photo_url[0]['photo_url'])){
-			return $photo_url[0]['photo_url'];
+	function getLastImageSaved() {
+		$result = $this->execSqlQuery("SELECT photo_url FROM pictures ORDER BY created_at DESC LIMIT 1", []);
+		if (is_array($result) && isset($result[0]['photo_url'])) {
+			return $result[0]['photo_url'];
 		}
-		return $photo_url;
+		return null;
 	}
+
 }
 ?>
