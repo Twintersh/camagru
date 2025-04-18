@@ -11,7 +11,7 @@ if (!isset($_SESSION["userID"]) || $_SESSION["userID"] == '')
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 	$uploadDir = '/var/www/src/View/public/posts/'; // Dossier où l'image sera stockée
-	$publicDir = '/posts/';
+	$publicDir = '';
 	$maxFileSize = 5 * 1024 * 1024; // Taille maximale du fichier : 5 Mo
 	$allowedFileTypes = ['image/jpeg', 'image/png']; // Types d'images autorisés
 

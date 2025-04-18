@@ -19,22 +19,6 @@
 	echo $db->getLastImageSaved();
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Camagru - Photo sharing
-		exit();
-	}
-	else if (gettype($mailVerif) == "array" && count($mailVerif) == 2) {
-		die($mailVerif[1]);
-	}
-	$db = new DatabaseManager;
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +54,7 @@
 		</div>
         <div class="post">
 			<div class="div-picture">
-				<img src="<?= $db->getLastImageSaved() ?>" alt="Post Image">
+			<img src="image.php?file=<?= $db->getLastImageSaved() ?>" alt="Post Image">
 			</div>
             <div class="post-content">
                 <p class="username">@user1</p>

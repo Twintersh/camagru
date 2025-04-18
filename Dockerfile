@@ -16,6 +16,7 @@ COPY . /var/www/
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/src/Controller
 RUN composer install
+WORKDIR /var/www/src
 
 EXPOSE 8000
 
