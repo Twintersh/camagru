@@ -16,7 +16,9 @@
 	else if (gettype($mailVerif) == "array" && count($mailVerif) == 2) {
 		die($mailVerif[1]);
 	}
-	echo $db->getLastImageSaved();
+	// echo $db->getLastImageSaved();
+
+	$pictures = $db->getLastPictures();
 ?>
 
 <!DOCTYPE html>
@@ -36,11 +38,84 @@
 	<!-- Styles -->
 	<link rel="stylesheet" href="style/menu.css">
 </head>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		document.querySelectorAll('.like-btn').forEach(button => {
+			button.addEventListener('click', () => {
+				const photoUrl = button.getAttribute('data-photo');
+
+				fetch('like.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: `photo_url=${encodeURIComponent(photoUrl)}`
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						button.querySelector('.like-count').textContent = data.likes;
+					} else {
+						alert(data.message);
+					}
+				});
+			});
+		});
+
+		document.querySelectorAll('.comment-btn').forEach(button => {
+			button.addEventListener('click', () => {
+				const commentForm = button.closest('.interactions').querySelector('.comment-form');
+				commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+			});
+		});
+
+		document.querySelectorAll('.submit-comment').forEach(button => {
+			button.addEventListener('click', () => {
+				const photoUrl = button.getAttribute('data-photo');
+				const userid = button.getAttribute('userid');
+				const commentText = button.parentElement.previousElementSibling.value;
+
+				if (!commentText.trim()) {
+					alert('Please write a comment first!');
+					return;
+				}
+
+				fetch('comment.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: `photo_url=${encodeURIComponent(photoUrl)}&comment=${encodeURIComponent(commentText)}&userID=${encodeURIComponent()}`
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						button.parentElement.previousElementSibling.value = '';
+						button.parentElement.parentElement.style.display = 'none';
+						alert('Comment posted successfully!');
+					} else {
+						alert(data.message || 'Error posting comment');
+					}
+				})
+				.catch(error => {
+					alert('Error posting comment');
+				});
+			});
+		});
+
+		document.querySelectorAll('.cancel-comment').forEach(button => {
+			button.addEventListener('click', () => {
+				const commentForm = button.closest('.comment-form');
+				commentForm.querySelector('.comment-textarea').value = '';
+				commentForm.style.display = 'none';
+			});
+		});
+	});
+</script>
 <body>
 	<nav class="navbar">
 		<button class="logo" aria-label="Home">Camagru</button>
-		<button class="navbar-button" aria-label="Take photo">📷</button>
-		<?php echo $db->getUser($_SESSION["userID"])[0][0] ?>
+		<a href="upload.php" class="navbar-button" aria-label="Take photo">📷</a>
 	</nav>
 	<div class="bubble bubble-1">
 	</div>
@@ -49,70 +124,43 @@
 	</div>
 	<div class="feed-container">
 		<div class="header-feed">
-			<h2>You <span class="color-secondary pacifico">Camagru</span> Feed</h2>
+			<h2>Your <span class="color-secondary pacifico">Camagru</span> Feed</h2>
 			<p>Discover everyday new post on your camagru feed and let people know about you with posts !</p>
 		</div>
-        <div class="post">
-			<div class="div-picture">
-			<img src="image.php?file=<?= $db->getLastImageSaved() ?>" alt="Post Image">
-			</div>
-            <div class="post-content">
-                <p class="username">@user1</p>
-                <p>Magnifique coucher de soleil 🌅</p>
-            </div>
-            <div class="interactions">
-                <button class="like-btn">❤️ Like</button>
-                <button class="comment-btn">💬 Commenter</button>
-            </div>
-        </div>
 
-        <div class="post">
-		<div class="div-picture">
-				<img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
+
+		<?php foreach ($pictures as $picture):
+			$photo_url = $picture['photo_url'];
+			$author = $db->getAuthorFromPhotoUrl($photo_url);
+			$desc = $db->getDescriptionFromPhotoUrl($photo_url);
+			$nblikes = $db->getLikesNb($photo_url);
+			?>
+			<div class="post">
+				<div class="div-picture">
+					<img src="image.php?file=<?= htmlspecialchars($photo_url) ?>" alt="Post Image">
+				</div>
+				<div class="post-content">
+					<p class="username">@<?= htmlspecialchars($author) ?></p>
+					<p><?= htmlspecialchars($desc) ?></p>
+				</div>
+				<div class="interactions">
+					<div class="button-container">
+						<button type="button" class="like-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">
+							❤️ <span class="like-count"><?= htmlspecialchars($nblikes) ?></span>
+						</button>
+						<button class="comment-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">💬 Comment</button>
+					</div>
+					<div class="comment-form" style="display: none;">
+						<textarea placeholder="Write your comment..." class="comment-textarea"></textarea>
+						<div class="comment-buttons">
+							<button class="submit-comment" data-photo="<?= htmlspecialchars($photo_url) ?>" userid="<?= htmlspecialchars($_SESSION["userID"]) ?>">Post</button>
+							<button class="cancel-comment">Cancel</button>
+						</div>
+					</div>
+				</div>
 			</div>
-            <div class="post-content">
-                <p class="username">@user2</p>
-                <p>Voyage à la montagne 🏔️</p>
-            </div>
-            <div class="interactions">
-                <button class="like-btn">❤️ Like</button>
-                <button class="comment-btn">💬 Commenter</button>
-            </div>
-        </div>
-        <div class="post">
-            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
-            <div class="post-content">
-                <p class="username">@user2</p>
-                <p>Voyage à la montagne 🏔️</p>
-            </div>
-            <div class="interactions">
-                <button class="like-btn">❤️ Like</button>
-                <button class="comment-btn">💬 Commenter</button>
-            </div>
-        </div>
-        <div class="post">
-            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
-            <div class="post-content">
-                <p class="username">@user2</p>
-                <p>Voyage à la montagne 🏔️</p>
-            </div>
-            <div class="interactions">
-                <button class="like-btn">❤️ Like</button>
-                <button class="comment-btn">💬 Commenter</button>
-            </div>
-        </div>
-        <div class="post">
-            <img src="https://www.mmv.fr/images/cms/lac-montagne/lac-blanc-haute-savoie.jpg?frz-v=530" alt="Post Image">
-            <div class="post-content">
-                <p class="username">@user2</p>
-                <p>Voyage à la montagne 🏔️</p>
-            </div>
-            <div class="interactions">
-                <button class="like-btn">❤️ Like</button>
-                <button class="comment-btn">💬 Commenter</button>
-            </div>
-        </div>
-    </div>
+		<?php endforeach; ?>
+
 	<footer class="footer">
 		<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 	</footer>

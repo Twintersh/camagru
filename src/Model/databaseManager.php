@@ -137,7 +137,6 @@ class DatabaseManager {
 
 	function saveImage($userID, $imagePath, $description){
 		$this->execSqlQuery("INSERT INTO pictures (authorID, photo_url, description) VALUES (?, ?, ?)", [$userID, $imagePath, $description]);
-		var_dump($imagePath);
 	}
 
 	function getLastImageSaved() {
@@ -145,7 +144,85 @@ class DatabaseManager {
 		if (is_array($result) && isset($result[0]['photo_url'])) {
 			return $result[0]['photo_url'];
 		}
-		return null;
+		return $result;
+	}
+
+	function getDescriptionFromPhotoUrl($photo_url) {
+		$result = $this->execSqlQuery("SELECT description FROM pictures WHERE photo_url = ?", [$photo_url]);
+		if (is_array($result) && isset($result[0]['description'])) {
+			return $result[0]['description'];
+		}
+		return $result;
+	}
+
+	function getAuthorFromPhotoUrl($photo_url){
+		$authorID = $this->execSqlQuery("SELECT authorID FROM pictures WHERE photo_url = ?", [$photo_url]);
+		if (is_array($authorID) && isset($authorID[0]['authorid'])) {
+			return $this->getUser($authorID[0]['authorid'])[0]['username'];
+		}
+		return $authorID;
+	}
+
+	function getLastPictures(){
+		$pictures = $this->execSqlQuery("SELECT * FROM pictures ORDER BY created_at DESC LIMIT 10 OFFSET 0", []);
+		return $pictures;
+	}
+
+	function getLikesNb($photo_url){
+		$likes = $this->execSqlQuery("SELECT likes FROM pictures WHERE photo_url = ?", [$photo_url]);
+		if (is_array($likes) && isset($likes[0]['likes'])) {
+			return $likes[0]['likes'];
+		}
+		return $likes;
+	}
+
+	function getPhotoIDfromUrl($photo_url){
+		$photoID = $this->execSqlQuery("SELECT id FROM pictures WHERE photo_url = ?", [$photo_url]);
+		if (count($photoID) > 0 && count($photoID[0]) > 0 && isset($photoID[0]['id'])){
+			return $photoID[0]['id'];
+		}
+		return $photoID;
+
+	}
+
+	function hasLiked($photoID, $userID){
+		$likeExists = $this->execSqlQuery(
+			"SELECT l.* FROM likes l JOIN pictures p ON l.picture = p.id WHERE p.id = ? AND l.authorID = ?",
+			[$photoID, $userID]
+		);
+		if (is_array($likeExists) && count($likeExists) === 0) {
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+
+	function manageLike($photo_url, $userID){
+		$photoID = $this->getPhotoIDfromUrl($photo_url);
+		if (gettype($photoID) == "array")
+			return;
+		if (!$this->hasLiked($photoID, $userID)) {
+			$this->execSqlQuery("INSERT INTO likes (authorID, picture) VALUES (?, ?)", [$userID, $photoID]);
+			$this->execSqlQuery("UPDATE pictures SET likes = likes + 1 WHERE id = ?", [$photoID]);
+		} else {
+			$this->execSqlQuery("DELETE FROM likes WHERE authorID = ? AND picture = ?", [$userID, $photoID]);
+			$this->execSqlQuery("UPDATE pictures SET likes = GREATEST(likes - 1, 0) WHERE id = ?", [$photoID]);
+		}
+		$result = $this->execSqlQuery("SELECT likes FROM pictures WHERE id = ?", [$photoID]);
+		return $result[0]['likes'] ?? 0;
+	}
+
+	function addComment($photo_url, $userID, $comment){
+		if (empty($comment)) {
+			return;
+		}
+		$photoID = $this->getPhotoIDfromUrl($photo_url);
+		if (!$photoID) {
+			return;
+		}
+		$this->execSqlQuery("INSERT INTO comments (authorID, picture, content) VALUES (?, ?, ?)", [$userID, $photoID, $comment]);
+		return;
 	}
 
 }

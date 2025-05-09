@@ -9,6 +9,61 @@ body {
 	padding: 0;
 }
 
+.navbar a {
+	text-decoration: none; /* Removes the underline */
+	color: inherit; /* Makes the text color inherit from its parent */
+}
+
+.comment-form {
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	width: 100%;
+}
+
+.comment-textarea {
+	width: 100%;
+	min-height: 60px;
+	padding: 8px;
+	margin-bottom: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	resize: vertical;
+	box-sizing: border-box;
+}
+
+.comment-buttons {
+	display: flex;
+	gap: 8px;
+}
+
+.submit-comment {
+	background-color: #9c39ff;
+	color: white;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.submit-comment:hover {
+	background-color: #9c39ff;
+}
+
+.cancel-comment {
+	background-color: #000000;
+	color: white;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.cancel-comment:hover {
+	background-color: #696969;
+}
+
 .color-secondary {
 	color: #9c39ff;
 }
@@ -156,10 +211,16 @@ body {
 }
 .interactions {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	flex-direction: column;
+	gap: 10px;
 	padding: 30px;
 }
+
+.button-container {
+	display: flex;
+	gap: 20px;
+}
+
 .like-btn, .comment-btn {
 	background: none;
 	border: none;

@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y git libpq-dev unzip zip libzip-dev && d
 # RUN apt-get update && apt-get install -y zlib1g-dev libpng-dev && docker-php-ext-install gd
 # #Install gd for image manipulation functions
 
+RUN echo "upload_max_filesize=10M" >> /usr/local/etc/php/php.ini \
+ && echo "post_max_size=10M" >> /usr/local/etc/php/php.ini
+
 COPY . /var/www/
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

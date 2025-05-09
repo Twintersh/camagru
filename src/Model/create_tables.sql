@@ -20,9 +20,9 @@ CREATE TABLE IF NOT EXISTS pictures (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	authorID UUID NOT NULL,
 	likes INT DEFAULT 0,
-	photo_url VARCHAR(511),
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	description VARCHAR(511)
+	photo_url VARCHAR(511) UNIQUE,
+	description VARCHAR(511),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS likes (
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS 	comments (
 );
 
 INSERT INTO users (username, email, password)
-SELECT 'twinters', 'tom.wintersheim@gmail.com', '$2a$12$b//c7IZKs10snoaqzJ5SReG/icBoRFG79w.qk.0VQalzKNJgU29ba'
+SELECT 'twinters', 'tom.wintersheim@gmail.com', '$2a$12$Z9GGPOJDvppLWIJVLRF1VOA0wddLwddotTquhcWn2bDbr/xAeuTka'
 WHERE NOT EXISTS (
   SELECT 1 FROM users WHERE username = 'twinters'
 );
