@@ -225,5 +225,23 @@ class DatabaseManager {
 		return;
 	}
 
+	function getComments($photo_url)
+	{
+		$photoID = $this->getPhotoIDfromUrl($photo_url);
+		if (!$photoID) {
+			return;
+		}
+		return $this->execSqlQuery("SELECT authorID, content FROM comments WHERE picture = ?", [$photoID]);
+	}
+
+	function getPaginatedPictures($page, $limit = 10) {
+		$offset = ($page + 1) * $limit;
+		$pictures = $this->execSqlQuery(
+			"SELECT * FROM pictures ORDER BY created_at DESC LIMIT :limit OFFSET :offset",
+			[':limit' => $limit, ':offset' => $offset]
+		);
+		return $pictures;
+	}
+
 }
 ?>

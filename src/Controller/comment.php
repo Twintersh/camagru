@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 require(__DIR__ . '/config.php');
 
 header('Content-Type: application/json');
@@ -8,12 +8,13 @@ $db = new DatabaseManager;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['photo_url'])) {
 	$photo_url = $_POST['photo_url'];
 	$userID = $_SESSION['userID'] ?? null;
+	$comment = $_POST['comment'];
 
 	if ($userID) {
-		$newLikeCount = $db->manageLike($photo_url, $userID);
+		$db->addComment($photo_url, $userID, $comment);
 		echo json_encode([
 			'success' => true,
-			'likes' => $newLikeCount
+			'content' => $db->getComments($photo_url)
 		]);
 	} else {
 		echo json_encode([
@@ -21,10 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['photo_url'])) {
 			'message' => 'Not authenticated.'
 		]);
 	}
-} else {
-	echo json_encode([
-		'success' => false,
-		'message' => 'Invalid request.'
-	]);
+	} else {
+		echo json_encode([
+			'success' => false,
+			'message' => 'Invalid request.'
+		]);
+	echo "Hell yeah";
 }
-?> -->
+?>
