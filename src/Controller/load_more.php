@@ -27,7 +27,7 @@ foreach ($pictures as $picture):
             <div class="button-container">
                 <button type="button" class="like-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">
                     ❤️ <span class="like-count"><?= htmlspecialchars($nblikes) ?></span>
-                </button>
+				</button>
                 <button class="comment-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">💬 Comment</button>
                 <button class="show-comment-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">👀 Show Comments</button>
             </div>
