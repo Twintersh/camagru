@@ -64,105 +64,103 @@
 	});
 
 	document.addEventListener('DOMContentLoaded', () => {
-		document.querySelectorAll('.like-btn').forEach(button => {
-			button.addEventListener('click', () => {
-				const photoUrl = button.getAttribute('data-photo');
+		const feedContainer = document.getElementById('feed-container') || document;
 
-				fetch('like.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body: `photo_url=${encodeURIComponent(photoUrl)}`
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.success) {
-						button.querySelector('.like-count').textContent = data.likes;
-					} else {
-						alert(data.message);
-					}
-				});
-			});
-		});
+		feedContainer.addEventListener('click', (e) => {
+			// LIKE BUTTON
+			const likeBtn = e.target.closest('.like-btn');
+			if (likeBtn) {
+			const photoUrl = likeBtn.getAttribute('data-photo');
 
-		document.querySelectorAll('.comment-btn').forEach(button => {
-			button.addEventListener('click', () => {
-				const commentForm = button.closest('.interactions').querySelector('.comment-form');
-				commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-			});
-		});
-
-		document.querySelectorAll('.show-comment-btn').forEach(button => {
-			button.addEventListener('click', () => {
-				const commentForm = button.closest('.interactions').querySelector('.comments');
-				commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-			});
-		});
-
-
-		document.querySelectorAll('.submit-comment').forEach(button => {
-			button.addEventListener('click', () => {
-				const photoUrl = button.getAttribute('data-photo');
-				const commentText = button.parentElement.previousElementSibling.value;
-
-				if (!commentText.trim()) {
-					alert('Please write a comment first!');
-					return;
+			fetch('like.php', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: `photo_url=${encodeURIComponent(photoUrl)}`
+			})
+				.then((res) => res.json())
+				.then((data) => {
+				if (data.success) {
+					likeBtn.querySelector('.like-count').textContent = data.likes;
+				} else {
+					alert(data.message);
 				}
-
-				fetch('comment.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body: `photo_url=${encodeURIComponent(photoUrl)}&comment=${encodeURIComponent(commentText)}`
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.success) {
-						button.parentElement.previousElementSibling.value = '';
-						button.parentElement.parentElement.style.display = 'none';
-
-						// Fetch and update comments
-						fetch('get_comments.php?photo_url=' + encodeURIComponent(photoUrl))
-							.then(response => response.json())
-							.then(commentsData => {
-								const commentsDiv = button.closest('.interactions').querySelector('.comments');
-								if (commentsData.length === 0) {
-									commentsDiv.innerHTML = '<p class="no-comments">There is no comments yet...</p>';
-								} else {
-									let commentsHTML = '';
-									commentsData.reverse().forEach(comment => {
-										commentsHTML += `
-											<div class='comment-box'>
-												<p><strong>@${comment.author}</strong></p>
-												<p class="comment-content">${comment.content}</p>
-											</div>
-										`;
-									});
-									commentsDiv.innerHTML = commentsHTML;
-								}
-							})
-							.catch(error => {
-								console.error('Error fetching comments:', error);
-							});
-					} else {
-						alert(data.message || 'Error posting comment');
-					}
-				})
-				.catch(error => {
-					alert('Error posting comment');
 				});
-			});
-		});
+			return;
+			}
 
-		document.querySelectorAll('.cancel-comment').forEach(button => {
-			button.addEventListener('click', () => {
-				const commentForm = button.closest('.comment-form');
+			// COMMENT BUTTON (SHOW/HIDE COMMENT FORM)
+			const commentBtn = e.target.closest('.comment-btn');
+			if (commentBtn) {
+				const commentForm = commentBtn.closest('.interactions').querySelector('.comment-form');
+				commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+				return;
+			}
+
+			// SHOW COMMENTS BUTTON
+			const showCommentBtn = e.target.closest('.show-comment-btn');
+			if (showCommentBtn) {
+				const commentsDiv = showCommentBtn.closest('.interactions').querySelector('.comments');
+				commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
+				return;
+			}
+
+			// SUBMIT COMMENT
+			const submitBtn = e.target.closest('.submit-comment');
+			if (submitBtn) {
+				const photoUrl = submitBtn.getAttribute('data-photo');
+				const commentText = submitBtn.parentElement.previousElementSibling.value;
+
+			if (!commentText.trim()) {
+				alert('Please write a comment first!');
+				return;
+			}
+
+			fetch('comment.php', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: `photo_url=${encodeURIComponent(photoUrl)}&comment=${encodeURIComponent(commentText)}`
+			})
+				.then((res) => res.json())
+				.then((data) => {
+				if (data.success) {
+					submitBtn.parentElement.previousElementSibling.value = '';
+					submitBtn.parentElement.parentElement.style.display = 'none';
+
+					// Refresh comments
+					fetch('get_comments.php?photo_url=' + encodeURIComponent(photoUrl))
+					.then((res) => res.json())
+					.then((commentsData) => {
+						const commentsDiv = submitBtn.closest('.interactions').querySelector('.comments');
+						if (commentsData.length === 0) {
+						commentsDiv.innerHTML = '<p class="no-comments">There are no comments yet...</p>';
+						} else {
+						commentsDiv.innerHTML = commentsData
+							.reverse()
+							.map(
+							(c) => `
+								<div class='comment-box'>
+								<p><strong>@${c.author}</strong></p>
+								<p class="comment-content">${c.content}</p>
+								</div>`
+							)
+							.join('');
+						}
+					});
+				} else {
+					alert(data.message || 'Error posting comment');
+				}
+				})
+				.catch(() => alert('Error posting comment'));
+			return;
+			}
+
+			// CANCEL COMMENT
+			const cancelBtn = e.target.closest('.cancel-comment');
+			if (cancelBtn) {
+				const commentForm = cancelBtn.closest('.comment-form');
 				commentForm.querySelector('.comment-textarea').value = '';
 				commentForm.style.display = 'none';
-			});
+			}
 		});
 	});
 </script>
