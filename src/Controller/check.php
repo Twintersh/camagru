@@ -1,13 +1,12 @@
 <?php
 require(__DIR__ . '/config.php');
-require(__DIR__ . '/utils.php');
 
 $db = new DatabaseManager;
 if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["email"])){
 	if (strlen($_POST["username"]) < 5){
-		$_SESSION["error_message"] = 'The username must be at least 8 characters long.';
+		$_SESSION["error_message"] = 'The username must be at least 5 characters long.';
 	}
-	if (strlen($_POST["username"]) > 12){
+	else if (strlen($_POST["username"]) > 12){
 		$_SESSION["error_message"] = 'The username can\'t be more than 12 characters long.';
 	}
 	elseif (preg_match('/[^a-zA-Z0-9]/', $_POST["username"])){
