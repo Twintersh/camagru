@@ -58,9 +58,10 @@
 	}
 
 	window.addEventListener('scroll', () => {
-	if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-		loadMore();
-	}
+		if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+			loadMore();
+			window.scrollBy({ top: -15, behavior: "auto" });
+		}
 	});
 
 	document.addEventListener('DOMContentLoaded', () => {
