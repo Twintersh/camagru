@@ -243,5 +243,14 @@ class DatabaseManager {
 		return $pictures;
 	}
 
+	function getUserPictures($userID) {
+		$pictures = $this->execSqlQuery(
+			"SELECT * FROM pictures WHERE authorID = ? ORDER BY created_at",
+			[$userID]
+		);
+		// var_dump($pictures);
+		return $pictures;
+	}
+
 }
 ?>

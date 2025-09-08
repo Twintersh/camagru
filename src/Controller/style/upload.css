@@ -9,8 +9,8 @@ body {
 }
 
 .navbar a {
-    text-decoration: none; /* Removes the underline */
-    color: inherit; /* Makes the text color inherit from its parent */
+	text-decoration: none; /* Removes the underline */
+	color: inherit; /* Makes the text color inherit from its parent */
 }
 
 .navbar {
@@ -20,7 +20,6 @@ body {
 	height: 5rem;
 	display: flex;
 	justify-content: flex-end;
-	z-index: 20;
 }
 
 .logo {
@@ -143,135 +142,187 @@ p[style*="color: red"] {
 }
 
 .camera-container {
-    margin-bottom: 20px;
-    text-align: center;
+	margin-bottom: 20px;
+	text-align: center;
 }
 
 .camera-btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 15px;
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-bottom: 15px;
 }
 
 .camera-btn:hover {
-    background-color: #45a049;
+	background-color: #45a049;
 }
 
 #videoContainer {
-    max-width: 100%;
-    margin: 0 auto;
+	max-width: 100%;
+	margin: 0 auto;
 }
 
 .video-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 640px;
-    margin: 0 auto;
+	position: relative;
+	width: 100%;
+	max-width: 640px;
+	margin: 0 auto;
 }
 
 #video {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 10px;
+	width: 100%;
+	border-radius: 8px;
+	margin-bottom: 10px;
 }
 
 .overlay-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
 }
 
 .overlay-gallery {
-    margin: 20px 0;
+	margin: 20px 0;
 }
 
 .overlay-gallery h3 {
-    margin-bottom: 10px;
-    color: #333;
+	margin-bottom: 10px;
+	color: #333;
 }
 
 .overlay-options {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
+	display: flex;
+	gap: 15px;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .overlay-option {
-    width: 100px;
-    height: 100px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    overflow: hidden;
-    transition: all 0.3s ease;
+	width: 100px;
+	height: 100px;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	cursor: pointer;
+	overflow: hidden;
+	transition: all 0.3s ease;
 }
 
 .overlay-option:hover {
-    border-color: #2196F3;
-    transform: scale(1.05);
+	border-color: #2196F3;
+	transform: scale(1.05);
 }
 
 .overlay-option.selected {
-    border-color: #2196F3;
-    box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+	border-color: #2196F3;
+	box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
 }
 
 .overlay-option img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 
 .camera-controls {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 10px;
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	margin-top: 10px;
 }
 
 .capture-btn, .retake-btn {
-    padding: 8px 16px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+	padding: 8px 16px;
+	font-size: 14px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
 }
 
 .capture-btn {
-    background-color: #2196F3;
-    color: white;
+	background-color: #2196F3;
+	color: white;
 }
 
 .retake-btn {
-    background-color: #f44336;
-    color: white;
+	background-color: #f44336;
+	color: white;
 }
 
 .capture-btn:hover {
-    background-color: #1976D2;
+	background-color: #1976D2;
 }
 
 .retake-btn:hover {
-    background-color: #d32f2f;
+	background-color: #d32f2f;
 }
 
 .error-message {
-    color: #f44336;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #ffebee;
-    border-radius: 4px;
+	color: #f44336;
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #ffebee;
+	border-radius: 4px;
 }
 
 .hidden {
-    display: none !important;
+	display: none !important;
+}
+
+
+/* side bar stuff */
+
+
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	display: flex;
+}
+
+/* Sidebar container */
+.sidebar {
+	position: fixed;       /* Stick in place */
+	right: 0;              /* Attach to the right side */
+	top: 0;
+	width: 250px;
+	background: #f4f4f4;
+	padding: 15px;
+	box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	overflow-y: auto;
+	height: 100%;
+}
+
+/* Each image card */
+.sidebar img {
+	width: 100%;
+	border-radius: 12px;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	cursor: pointer;
+}
+
+/* Hover effect */
+.sidebar img:hover {
+	transform: scale(1.01);
+	box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.resize-handle {
+	position: fixed;					/* sticks to the viewport, independent of sidebar scroll */
+	left: calc(100vw - 250px - 5px);	/* sidebar width + handle offset */
+	top: 0;
+	height: 100vh;						/* full height of viewport */
+	width: 10px;
+	cursor: ew-resize;
+	background: red;
+	z-index: 3;
 }

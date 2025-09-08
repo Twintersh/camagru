@@ -11,6 +11,8 @@ if (!isset($_SESSION["userID"]) || $_SESSION["userID"] == '')
 	exit();
 }
 
+$usrImages = $db->getUserPictures($_SESSION["userID"]);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image']))
 {
 	$uploadDir = '/var/www/src/View/public/posts/';
@@ -254,8 +256,47 @@ if (isset($_SESSION['upload_message'])) {
 				startCameraBtn.addEventListener('click', startCamera);
 				captureBtn.addEventListener('click', capturePhoto);
 				retakeBtn.addEventListener('click', retakePhoto);
+
+				const sidebar = document.getElementById("sidebar");
+				const handle = document.getElementById("resize-handle");
+
+				let isResizing = false;
+
+				handle.addEventListener("mousedown", (e) => {
+					if (e.button != 0) return;
+					isResizing = true;
+					document.body.style.cursor = "ew-resize";
+					document.body.style.userSelect = "none"
+				});
+
+				window.addEventListener("mousemove", (e) => {
+					handle.style.left = window.innerWidth - sidebar.style.width;
+					console.log(sidebar.style.width);
+					if (!isResizing) return;
+
+					const newWidth = window.innerWidth - e.clientX;
+					if (newWidth > 150 && newWidth < 600) { // min/max width
+						sidebar.style.width = newWidth + "px";
+						// handle.style.left = window.innerWidth - 5 - sidebar.style.width  + "px";
+						console.log(sidebar.style.width)
+					}
+				});
+
+				window.addEventListener("mouseup", () => {
+					isResizing = false;
+					document.body.style.cursor = "default";
+					document.body.style.userSelect = ""
+				});
 			});
+
 		</script>
+		<div class="sidebar" id="sidebar">
+			<div class="resize-handle" id="resize-handle"></div>
+			<?php foreach ($usrImages as $img): ?>
+				<img src="image.php?file=<?= htmlspecialchars($img["photo_url"]) ?>" alt="Sidebar Image">
+			<?php endforeach; ?>
+		</div>
+
 		<!-- <footer class="footer">
 			<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
 		</footer> -->
