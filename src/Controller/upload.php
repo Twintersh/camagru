@@ -270,15 +270,13 @@ if (isset($_SESSION['upload_message'])) {
 				});
 
 				window.addEventListener("mousemove", (e) => {
-					handle.style.left = window.innerWidth - sidebar.style.width;
-					console.log(sidebar.style.width);
+					handle.style.left = window.innerWidth - sidebar.offsetWidth + "px";
 					if (!isResizing) return;
 
 					const newWidth = window.innerWidth - e.clientX;
 					if (newWidth > 150 && newWidth < 600) { // min/max width
 						sidebar.style.width = newWidth + "px";
-						// handle.style.left = window.innerWidth - 5 - sidebar.style.width  + "px";
-						console.log(sidebar.style.width)
+						handle.style.left = e.clientX + 'px';
 					}
 				});
 

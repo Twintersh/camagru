@@ -323,6 +323,6 @@ body {
 	height: 100vh;						/* full height of viewport */
 	width: 10px;
 	cursor: ew-resize;
-	background: red;
+	background: transparent;
 	z-index: 3;
 }
