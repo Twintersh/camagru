@@ -1,0 +1,42 @@
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+
+    .box {
+      position: relative;
+      width: 200px;
+      height: 120px;
+      background-color: lightblue;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .delete {
+		cursor: pointer;
+      position: absolute;
+      top: 8px;
+      right: 90%;
+      font-size: 20px;
+      font-weight: bold;
+      color: red;
+      cursor: pointer;
+      display: none; /* hidden by default */
+    }
+
+    /* Show delete cross on hover */
+    .box:hover .delete {
+      display: block;
+    }
+
+    /* Optional hover effect on cross */
+    .delete:hover {
+      color: darkred;
+    }

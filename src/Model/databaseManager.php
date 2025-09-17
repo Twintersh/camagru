@@ -245,12 +245,44 @@ class DatabaseManager {
 
 	function getUserPictures($userID) {
 		$pictures = $this->execSqlQuery(
-			"SELECT * FROM pictures WHERE authorID = ? ORDER BY created_at",
+			"SELECT * FROM pictures WHERE authorID = ? ORDER BY created_at DESC",
 			[$userID]
 		);
 		// var_dump($pictures);
 		return $pictures;
 	}
 
+	function deletePicture($photo_url, $userID){
+		// Get the picture ID from URL
+		$photoID = $this->getPhotoIDfromUrl($photo_url);
+
+		// Delete the picture only if the authorID matches the given userID
+		$sql = "
+			DELETE FROM pictures
+			WHERE id = :photoID
+			AND authorID = :userID
+		";
+
+		$params = [
+			':photoID' => $photoID,
+			':userID'  => $userID
+		];
+
+		$result = $this->execSqlQuery($sql, $params);
+		if ($result[0] === []) {
+			return true;
+		} elseif ($result[0] === false) {
+			return false;
+		}
+	}
+
+	function getMailFromUsername($userID)
+	{
+		$mail = $this->execSqlQuery("SELECT email FROM users WHERE username = ?", [$userID]);
+		if (is_array($mail) && isset($mail[0]['authorid'])) {
+			return $mail[0]['username'];
+		}
+		return $mail;
+	}
 }
 ?>

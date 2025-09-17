@@ -262,6 +262,8 @@ if (isset($_SESSION['upload_message'])) {
 
 				let isResizing = false;
 
+
+
 				handle.addEventListener("mousedown", (e) => {
 					if (e.button != 0) return;
 					isResizing = true;
@@ -285,18 +287,38 @@ if (isset($_SESSION['upload_message'])) {
 					document.body.style.cursor = "default";
 					document.body.style.userSelect = ""
 				});
+
+				document.querySelectorAll(".delete").forEach(btn => {
+					btn.addEventListener("click", () => {
+					const photoUrl = btn.getAttribute('data-photo');
+					fetch('delete.php', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+						body: `photo_url=${encodeURIComponent(photoUrl)}`
+					})
+					.then((res) => res.json())
+					.then((data) => {
+						alert(data.message);
+						btn.parentElement.remove();
+					});
+					});
+				});
+
 			});
 
 		</script>
 		<div class="sidebar" id="sidebar">
 			<div class="resize-handle" id="resize-handle"></div>
 			<?php foreach ($usrImages as $img): ?>
-				<img src="image.php?file=<?= htmlspecialchars($img["photo_url"]) ?>" alt="Sidebar Image">
+				<div class="box" id="box">
+					<img src="image.php?file=<?= htmlspecialchars($img["photo_url"]) ?>" alt="Sidebar Image">
+					<span class="delete" id="deleteBtn" data-photo="<?= htmlspecialchars($img["photo_url"]) ?>" >&times;</span>
+				</div>
 			<?php endforeach; ?>
 		</div>
-
-		<!-- <footer class="footer">
+		<footer class="footer">
 			<p>Made by <a href="https://github.com/Twintersh" class="link">twinters</a></p>
-		</footer> -->
+		</footer>
+		<a href="disconnect.php" class="fixed-btn">Disconnect</a>
 	</body>
 </html>

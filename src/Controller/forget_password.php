@@ -1,6 +1,5 @@
 <?php
 require(__DIR__ . '/config.php');
-require(__DIR__ . '/utils.php');
 
 $db = new DatabaseManager;
 $error_message = '';
@@ -15,7 +14,7 @@ if (isset($_POST["email"])){
 	}
 	$db->createToken($userID);
 	$token = $db->getToken($userID);
-	sendMail($_POST["email"], 'gros golem',
+	sendMail($_POST["email"], 'camagru user',
 	"Reset Password",
 	"http://localhost:8000/fieldpassword.php?token=$token");
 	$_SESSION["success_message"] = "Email sent ! Check your mail box to change your password";

@@ -9,7 +9,7 @@
 	}
 	$mailVerif = $db->checkMailVerif($_SESSION["userID"]);
 	if (!$mailVerif) {
-		$_SESSION["message"] = "Your account is not verified yet ! Please check your emails";
+		$_SESSION["message"] = "Your account is not verified yet ! Please check your emails <br> <a href='disconnect.php' class='link'>log out</a>";
 		header("Location: notverified.php");
 		exit();
 	}
@@ -78,14 +78,14 @@
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: `photo_url=${encodeURIComponent(photoUrl)}`
 			})
-				.then((res) => res.json())
-				.then((data) => {
-				if (data.success) {
-					likeBtn.querySelector('.like-count').textContent = data.likes;
-				} else {
-					alert(data.message);
-				}
-				});
+			.then((res) => res.json())
+			.then((data) => {
+			if (data.success) {
+				likeBtn.querySelector('.like-count').textContent = data.likes;
+			} else {
+				alert(data.message);
+			}
+			});
 			return;
 			}
 
@@ -115,6 +115,7 @@
 				alert('Please write a comment first!');
 				return;
 			}
+			console.log("Yo!");
 
 			fetch('comment.php', {
 				method: 'POST',
@@ -186,6 +187,7 @@
 			$db = new DatabaseManager();
 			$photo_url = $picture['photo_url'];
 			$author = $db->getAuthorFromPhotoUrl($photo_url);
+			$email =  $db->getMailFromUsername($author);
 			$desc = $db->getDescriptionFromPhotoUrl($photo_url);
 			$nblikes = $db->getLikesNb($photo_url);
 			?>
@@ -195,7 +197,7 @@
 					<img src="image.php?file=<?= htmlspecialchars($photo_url) ?>" alt="Post Image">
 				</div>
 				<div class="post-content">
-					<p class="username">@<?= htmlspecialchars($author) ?></p>
+					<p class="username">@<?= htmlspecialchars($email[0][0]) ?></p>
 					<p><?= htmlspecialchars($desc) ?></p>
 				</div>
 				<div class="interactions">
@@ -233,6 +235,7 @@
 			</div>
 		<?php endforeach; ?>
 	</div>
+	<a href="disconnect.php" class="fixed-btn">Disconnect</a>
 	<div id="loader" class="loader" style="display: none;">
 		Loading...
 	</div>

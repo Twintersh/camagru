@@ -120,9 +120,14 @@ body {
 }
 
 .footer {
-	margin-top: 50px;
 	position: relative;
 	bottom: 0;
+	left: 0;
+	/* width: 100%; */
+	background: transparent;
+	color: rgb(0, 0, 0);
+	text-align: center;
+	padding: 15px;
 }
 
 .bubble {
@@ -192,6 +197,11 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+/* .loader  {
+  margin-top: 20px;
+  margin-bottom: 20px;
+} */
 
 .comments {
 	background: white;
@@ -266,4 +276,25 @@ body {
 	border: none;
 	cursor: pointer;
 	font-size: 16px;
+}
+
+.fixed-btn {
+	position: fixed;
+	left: 20px;
+	bottom: 20px;
+	z-index: 9999;
+	padding: 12px 20px;
+	border-radius: 12px;
+	background-color: #e53935;
+	color: #fff;
+	font-weight: 600;
+	text-decoration: none;   /* remove underline */
+	display: inline-block;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+	transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.fixed-btn:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 26px rgba(0,0,0,0.22);
 }
