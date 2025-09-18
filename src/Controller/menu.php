@@ -196,7 +196,7 @@
 					<img src="image.php?file=<?= htmlspecialchars($photo_url) ?>" alt="Post Image">
 				</div>
 				<div class="post-content">
-					<p class="username">@<?= htmlspecialchars($author[0][0]) ?></p>
+					<p class="username">@<?= htmlspecialchars($author) ?></p>
 					<p><?= htmlspecialchars($desc) ?></p>
 				</div>
 				<div class="interactions">
