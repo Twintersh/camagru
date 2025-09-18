@@ -1,4 +1,21 @@
-liste de choses à faire pour cloturer camagru :
-[ ] Voir l'historique des images faites par le user à droite de l'espace edition
-[ ] Supprimer ses photos
-[ ] Pouvoir se déconnecter à tout moment depuis la home page
+List of things to end camagru
+
+MANDATORY
+
+[ ] Add several stickers at once
+[ ] Image editing pipeline server-side
+[ ] Access menu page as guest
+	[ ] User preferences :
+	[ ] Change username
+	[ ] Change password
+	[ ] Change email
+[ ] Set notification true or false
+[ ] Mobile compatibility
+
+BONUS
+
+[ ] AJAX-ify exchanges between front and back
+[X] Live preview of webcam
+[ ] Render GIF
+[X] Infinite scroll
+[ ] Render GIF
