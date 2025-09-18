@@ -2,21 +2,6 @@
 	require(__DIR__ . '/config.php');
 
 	$db = new DatabaseManager;
-	if (!isset($_SESSION["userID"]) || !$_SESSION["userID"]) {
-		header("Location: unlogged_menu.php");
-		exit();
-	}
-	$mailVerif = $db->checkMailVerif($_SESSION["userID"]);
-	if (!$mailVerif) {
-		$_SESSION["message"] = "Your account is not verified yet ! Please check your emails <br> <a href='disconnect.php' class='link'>log out</a>";
-		header("Location: notverified.php");
-		exit();
-	}
-	else if (gettype($mailVerif) == "array" && count($mailVerif) == 2) {
-		die($mailVerif[1]);
-	}
-	// echo $db->getLastImageSaved();
-
 	$pictures = $db->getLastPictures();
 ?>
 
@@ -67,100 +52,12 @@
 		const feedContainer = document.getElementById('feed-container') || document;
 
 		feedContainer.addEventListener('click', (e) => {
-			// LIKE BUTTON
-			const likeBtn = e.target.closest('.like-btn');
-			if (likeBtn) {
-			const photoUrl = likeBtn.getAttribute('data-photo');
-
-			fetch('like.php', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: `photo_url=${encodeURIComponent(photoUrl)}`
-			})
-			.then((res) => res.json())
-			.then((data) => {
-			if (data.success) {
-				likeBtn.querySelector('.like-count').textContent = data.likes;
-			} else {
-				alert(data.message);
-			}
-			});
-			return;
-			}
-
-			// COMMENT BUTTON (SHOW/HIDE COMMENT FORM)
-			const commentBtn = e.target.closest('.comment-btn');
-			if (commentBtn) {
-				const commentForm = commentBtn.closest('.interactions').querySelector('.comment-form');
-				commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-				return;
-			}
-
 			// SHOW COMMENTS BUTTON
 			const showCommentBtn = e.target.closest('.show-comment-btn');
 			if (showCommentBtn) {
 				const commentsDiv = showCommentBtn.closest('.interactions').querySelector('.comments');
 				commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
 				return;
-			}
-
-			// SUBMIT COMMENT
-			const submitBtn = e.target.closest('.submit-comment');
-			if (submitBtn) {
-				const photoUrl = submitBtn.getAttribute('data-photo');
-				const commentText = submitBtn.parentElement.previousElementSibling.value;
-
-			if (!commentText.trim()) {
-				alert('Please write a comment first!');
-				return;
-			}
-			console.log("Yo!");
-
-			fetch('comment.php', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: `photo_url=${encodeURIComponent(photoUrl)}&comment=${encodeURIComponent(commentText)}`
-			})
-				.then((res) => res.json())
-				.then((data) => {
-				if (data.success) {
-					submitBtn.parentElement.previousElementSibling.value = '';
-					submitBtn.parentElement.parentElement.style.display = 'none';
-
-					// Refresh comments
-					fetch('get_comments.php?photo_url=' + encodeURIComponent(photoUrl))
-					.then((res) => res.json())
-					.then((commentsData) => {
-						const commentsDiv = submitBtn.closest('.interactions').querySelector('.comments');
-						if (commentsData.length === 0) {
-						commentsDiv.innerHTML = '<p class="no-comments">There are no comments yet...</p>';
-						} else {
-						commentsDiv.innerHTML = commentsData
-							.reverse()
-							.map(
-							(c) => `
-								<div class='comment-box'>
-								<p><strong>@${c.author}</strong></p>
-								<p class="comment-content">${c.content}</p>
-								</div>`
-							)
-							.join('');
-						}
-					});
-				} else {
-					alert(data.message || 'Error posting comment');
-				}
-				})
-				.catch(() => alert('Error posting comment'));
-			return;
-			}
-
-			// CANCEL COMMENT
-			const cancelBtn = e.target.closest('.cancel-comment');
-			if (cancelBtn) {
-				const commentForm = cancelBtn.closest('.comment-form');
-				commentForm.querySelector('.comment-textarea').value = '';
-				commentForm.style.display = 'none';
 			}
 		});
 	});
@@ -203,7 +100,6 @@
 						<button type="button" class="like-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">
 							❤️ <span class="like-count"><?= htmlspecialchars($nblikes) ?></span>
 						</button>
-						<button class="comment-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">💬 Comment</button>
 						<button class="show-comment-btn" data-photo="<?= htmlspecialchars($photo_url) ?>">👀 Show Comments</button>
 					</div>
 					<div class="comment-form" style="display: none;">
@@ -233,7 +129,6 @@
 			</div>
 		<?php endforeach; ?>
 	</div>
-	<a href="disconnect.php" class="fixed-btn">Disconnect</a>
 	<div id="loader" class="loader" style="display: none;">
 		Loading...
 	</div>

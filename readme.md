@@ -4,8 +4,8 @@ MANDATORY
 
 [ ] Add several stickers at once
 [ ] Image editing pipeline server-side
-[ ] Access menu page as guest
-	[ ] User preferences :
+[X] Access menu page as guest
+[ ] User preferences :
 	[ ] Change username
 	[ ] Change password
 	[ ] Change email

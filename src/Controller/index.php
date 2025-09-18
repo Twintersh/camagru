@@ -76,6 +76,7 @@ if (isset($_SESSION['success_message'])) {
 			<div class="form-footer">
 				<a href="forget_password.php" class="link">Forgot your password?</a>
 				<p>Don't have an account? <a href="register.php" class="link">Sign up</a></p>
+				<p><a href="unlogged_menu.php" class="link">Access feed as guest</a></p>
 			</div>
 		</form>
 	</div>
