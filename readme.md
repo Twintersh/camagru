@@ -9,7 +9,7 @@ MANDATORY
 	[ ] Change username
 	[ ] Change password
 	[ ] Change email
-[ ] Set notification true or false
+	[ ] Set notification true or false
 [ ] Mobile compatibility
 
 BONUS
