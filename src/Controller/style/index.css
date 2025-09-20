@@ -38,6 +38,12 @@ body {
 	text-align: center;
 }
 
+a#h1 {
+  text-decoration: none;   /* removes underline */
+  display: block;          /* makes it take full width */
+  text-align: center;      /* centers the text */
+}
+
 .input-group {
 	margin: 0 2rem 1.2rem 0;
 }

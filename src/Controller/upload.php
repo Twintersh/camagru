@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image']))
 {
 	$uploadDir = '/var/www/src/View/public/posts/';
 	$publicDir = '';
-	$allowedFileTypes = ['image/jpeg', 'image/png'];
+	$allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif'];
 	$file = $_FILES['image'];
 
 	if ($file['error'] !== UPLOAD_ERR_OK)
@@ -26,40 +26,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image']))
 		{
 			case UPLOAD_ERR_FORM_SIZE:
 				$_SESSION["upload_message"] = "<p style='color:red;'>L'image dépasse la taille maximale autorisée.</p>";
-				header("Location: upload.php");
-				exit();
 				break;
 			case UPLOAD_ERR_PARTIAL:
 				$_SESSION["upload_message"] = "<p style='color:red;'>L'image n'a été que partiellement téléchargée.</p>";
-				header("Location: upload.php");
-				exit();
 				break;
 			case UPLOAD_ERR_NO_FILE:
 				$_SESSION["upload_message"] = "<p style='color:red;'>Aucun fichier n'a été téléchargé.</p>";
-				header("Location: upload.php");
-				exit();
 				break;
 			case UPLOAD_ERR_NO_TMP_DIR:
 				$_SESSION["upload_message"] = "<p style='color:red;'>Dossier temporaire manquant sur le serveur.</p>";
-				header("Location: upload.php");
-				exit();
 				break;
 			case UPLOAD_ERR_CANT_WRITE:
 				$_SESSION["upload_message"] = "<p style='color:red;'>Erreur d'écriture sur le disque.</p>";
-				header("Location: upload.php");
-				exit();
 				break;
 			case UPLOAD_ERR_EXTENSION:
 				$_SESSION["upload_message"] = "<p style='color:red;'>Téléchargement stoppé par une extension PHP.</p>";
-				header("Location: upload.php");
-				exit();
 				break;
 			default:
 				$_SESSION["upload_message"] = "<p style='color:red;'>Erreur inconnue lors du téléchargement.</p>";
-				header("Location: upload.php");
-				exit();
 				break;
 		}
+		header("Location: upload.php");
+		exit();
 	}
 	else
 	{
@@ -105,10 +93,6 @@ if (isset($_SESSION['upload_message'])) {
 	$message = $_SESSION['upload_message'];
 	unset($_SESSION['upload_message']); // Clear error after showing it
 }
-if (isset($_SESSION['upload_message'])) {
-	$message = $_SESSION['upload_message'];
-	unset($_SESSION['upload_message']); // Clear error after showing it
-}
 ?>
 
 <!DOCTYPE html>
@@ -133,9 +117,10 @@ if (isset($_SESSION['upload_message'])) {
 			<div class="camera-container">
 				<button id="startCamera" class="camera-btn">📷 Use Camera</button>
 				<div id="videoContainer" class="hidden">
-					<div class="video-wrapper">
+					<div class="video-wrapper" style="position: relative;">
 						<video id="video" autoplay playsinline></video>
-						<img id="overlay" class="overlay-image hidden">
+						<!-- Multiple overlays will be injected here -->
+						<div id="overlay-container" class="overlay-container"></div>
 					</div>
 					<canvas id="canvas" class="hidden"></canvas>
 					<div class="overlay-gallery">
@@ -180,10 +165,10 @@ if (isset($_SESSION['upload_message'])) {
 				const retakeBtn = document.getElementById('retakeBtn');
 				const cameraError = document.getElementById('cameraError');
 				const fileInput = document.querySelector('input[type="file"]');
-				const overlayImg = document.getElementById('overlay');
 				const overlayOptions = document.querySelectorAll('.overlay-option');
+				const overlayContainer = document.getElementById('overlay-container');
 				let currentStream = null;
-				let selectedOverlay = null;
+				let selectedOverlays = [];
 
 				async function startCamera() {
 					try {
@@ -216,10 +201,13 @@ if (isset($_SESSION['upload_message'])) {
 					// Draw the video frame
 					ctx.drawImage(video, 0, 0);
 
-					// If an overlay is selected, draw it
-					if (selectedOverlay) {
-						ctx.drawImage(overlayImg, 0, 0, canvas.width, canvas.height);
-					}
+					// Draw all selected overlays
+					selectedOverlays.forEach(path => {
+						const img = overlayContainer.querySelector(`img[data-overlay="${path}"]`);
+						if (img) {
+							ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+						}
+					});
 
 					canvas.toBlob((blob) => {
 						const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
@@ -242,14 +230,23 @@ if (isset($_SESSION['upload_message'])) {
 				// Handle overlay selection
 				overlayOptions.forEach(option => {
 					option.addEventListener('click', () => {
-						// Remove selected class from all options
-						overlayOptions.forEach(opt => opt.classList.remove('selected'));
-						// Add selected class to clicked option
-						option.classList.add('selected');
-						// Set the overlay image
-						selectedOverlay = option.dataset.overlay;
-						overlayImg.src = selectedOverlay;
-						overlayImg.classList.remove('hidden');
+						const overlayPath = option.dataset.overlay;
+
+						if (option.classList.contains('selected')) {
+							// Deselect → remove from container and list
+							option.classList.remove('selected');
+							selectedOverlays = selectedOverlays.filter(o => o !== overlayPath);
+							const imgToRemove = overlayContainer.querySelector(`img[data-overlay="${overlayPath}"]`);
+							if (imgToRemove) overlayContainer.removeChild(imgToRemove);
+						} else {
+							// Select → add to container and list
+							option.classList.add('selected');
+							selectedOverlays.push(overlayPath);
+							const img = document.createElement('img');
+							img.src = overlayPath;
+							img.dataset.overlay = overlayPath;
+							overlayContainer.appendChild(img);
+						}
 					});
 				});
 
@@ -261,8 +258,6 @@ if (isset($_SESSION['upload_message'])) {
 				const handle = document.getElementById("resize-handle");
 
 				let isResizing = false;
-
-
 
 				handle.addEventListener("mousedown", (e) => {
 					if (e.button != 0) return;
@@ -290,23 +285,22 @@ if (isset($_SESSION['upload_message'])) {
 
 				document.querySelectorAll(".delete").forEach(btn => {
 					btn.addEventListener("click", () => {
-					const photoUrl = btn.getAttribute('data-photo');
-					fetch('delete.php', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-						body: `photo_url=${encodeURIComponent(photoUrl)}`
-					})
-					.then((res) => res.json())
-					.then((data) => {
-						alert(data.message);
-						btn.parentElement.remove();
-					});
+						const photoUrl = btn.getAttribute('data-photo');
+						fetch('delete.php', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+							body: `photo_url=${encodeURIComponent(photoUrl)}`
+						})
+						.then((res) => res.json())
+						.then((data) => {
+							alert(data.message);
+							btn.parentElement.remove();
+						});
 					});
 				});
-
 			});
-
 		</script>
+
 		<div class="sidebar" id="sidebar">
 			<div class="resize-handle" id="resize-handle"></div>
 			<?php foreach ($usrImages as $img): ?>
