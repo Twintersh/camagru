@@ -271,7 +271,7 @@ if (isset($_SESSION['upload_message'])) {
 					if (!isResizing) return;
 
 					const newWidth = window.innerWidth - e.clientX;
-					if (newWidth > 150 && newWidth < 600) { // min/max width
+					if (newWidth > 50 && newWidth < 600) { // min/max width
 						sidebar.style.width = newWidth + "px";
 						handle.style.left = e.clientX + 'px';
 					}
