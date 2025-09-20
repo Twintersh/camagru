@@ -3,14 +3,9 @@ require(__DIR__ . '/config.php');
 
 $db = new DatabaseManager;
 if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["email"])){
-	if (strlen($_POST["username"]) < 5){
-		$_SESSION["error_message"] = 'The username must be at least 5 characters long.';
-	}
-	else if (strlen($_POST["username"]) > 12){
-		$_SESSION["error_message"] = 'The username can\'t be more than 12 characters long.';
-	}
-	elseif (preg_match('/[^a-zA-Z0-9]/', $_POST["username"])){
-		$_SESSION["error_message"] = 'The username cannot contain special characters.';
+	if (!isValidUsername($_POST["username"])){
+		header("Location: register.php");
+		exit();
 	}
 	elseif (!isValidPassword($_POST["password"])){
 		$_SESSION["error_message"] = 'The password must be 8 characters long with at least one number.';
@@ -18,6 +13,8 @@ if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["emai
 	elseif ($db->checkEmailExists($_POST["email"])){
 		$_SESSION["error_message"] = 'This email is already used.';
 	}
+	elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL))
+		$_SESSION["error_message"] = 'Invalid email format.';
 	elseif ($db->createUser($_POST["username"], $_POST["password"], $_POST["email"])){
 		if ($db->getID($_POST["username"])){
 			$_SESSION["userID"] = $db->getID($_POST["username"]);

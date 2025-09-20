@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				exit();
 			}
 			else {
-				$db->changePassword($_POST['password'], $_GET["token"]);
+				$db->changePasswordwithToken($_POST['password'], $_GET["token"]);
 				$_SESSION["success_message"] = 'Password had been changed successfuly ! You can now connect.';
 				header("Location: index.php");
 				exit();

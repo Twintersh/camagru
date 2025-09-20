@@ -168,6 +168,7 @@
 <body>
 	<nav class="navbar">
 		<button class="logo" aria-label="Home">Camagru</button>
+		<a href="userpreferences.php" class="navbar-button" aria-label="change your data">⚙️</a>
 		<a href="upload.php" class="navbar-button" aria-label="Take photo">📷</a>
 	</nav>
 	<div class="bubble bubble-1">

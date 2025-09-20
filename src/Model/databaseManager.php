@@ -128,7 +128,7 @@ class DatabaseManager {
 		return false;
 	}
 
-	function changePassword($password, $token){
+	function changePasswordwithToken($password, $token){
 		$userId = $this->execSqlQuery("SELECT userID from tokens WHERE verifToken = ?", [$token]);
 		$hashedPass = password_hash($password, PASSWORD_BCRYPT);
 		$data = $this->execSqlQuery("UPDATE users SET password = ? WHERE id = ?", [$hashedPass, $userId[0]["userid"]]);
@@ -276,13 +276,53 @@ class DatabaseManager {
 		}
 	}
 
-	function getMailFromUsername($userID)
+	function getMailFromUsername($username)
 	{
-		$mail = $this->execSqlQuery("SELECT email FROM users WHERE username = ?", [$userID]);
+		$mail = $this->execSqlQuery("SELECT email FROM users WHERE username = ?", [$username]);
 		if (is_array($mail) && isset($mail[0]['authorid'])) {
-			return $mail[0]['username'];
+			return $mail[0][0];
 		}
 		return $mail;
 	}
+
+	function checkNotifStatus($userID){
+		$notifs = $this->execSqlQuery("SELECT notifs FROM users WHERE id = ?", [$userID]);
+		if (gettype($notifs) == "array" && count($notifs) > 0 && gettype($notifs[0]) == "array" && count($notifs[0]) > 0 && isset($notifs[0]['notifs'])){
+			return $notifs[0]['notifs'];
+		}
+		return $notifs;
+	}
+
+	function changeNotifStatus($userID){
+		$isTrue = $this->checkNotifStatus($userID);
+		$this->execSqlQuery("UPDATE users SET notifs = ? WHERE id = ?", [(int)!$isTrue, $userID]);
+		return $this->checkNotifStatus($userID);
+	}
+
+	function changeUsername($userID, $newUsername){
+		$this->execSqlQuery("UPDATE users SET username = ? WHERE id = ?", [$newUsername, $userID]);
+		return $this->getUser($userID);
+	}
+
+	function changeEmail($userID, $newEmail){
+		$this->execSqlQuery("UPDATE users SET email = ? WHERE id = ?", [$newEmail, $userID]);
+		return $this->execSqlQuery("SELECT email FROM users WHERE id = ?", [$userID])[0][0];
+	}
+
+	function checkUserExists($username){
+		$data = $this->execSqlQuery("SELECT username FROM users WHERE username = ?", [$username]);
+		if (count($data) > 0){
+			return true;
+		}
+		return false;
+	}
+
+	function changePassword($password, $userId){
+		$hashedPass = password_hash($password, PASSWORD_BCRYPT);
+		$data = $this->execSqlQuery("UPDATE users SET password = ? WHERE id = ?", [$hashedPass, $userId]);
+		return $data;
+	}
 }
+
+
 ?>

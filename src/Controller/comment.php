@@ -18,10 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['photo_url'])) {
 		]);
 
 		$author_username = $db->getAuthorFromPhotoUrl($photo_url);
-		$email = $db->getMailFromUsername($author_username)[0][0];
-		sendMail($email, $author_username,
-		"Camagru - New Comment",
-		"You just received a new comment under one of your posts !");
+		if ($db->checkNotifStatus($db->getID($author_username)))
+		{
+			$email = $db->getMailFromUsername($author_username)[0][0];
+			sendMail($email, $author_username,
+			"Camagru - New Comment",
+			"You just received a new comment under one of your posts !");
+		}
 	} else {
 		echo json_encode([
 			'success' => false,
@@ -33,6 +36,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['photo_url'])) {
 			'success' => false,
 			'message' => 'Invalid request.'
 		]);
-	echo "Hell yeah";
 }
 ?>
