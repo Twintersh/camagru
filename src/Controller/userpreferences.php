@@ -14,11 +14,16 @@ if (!isset($_SESSION["userID"]) || $_SESSION["userID"] == '')
 $username = $db->getUser($_SESSION["userID"])[0]['username'];
 $email = $db->getMailFromUsername($username)[0][0];
 $notifs = $db->checkNotifStatus($db->getID($username));
+$profile = $db->checkProfileStatus($db->getID($username));
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$toggleStatus = false;
-if (isset($_POST['toggleSwitch']) && $_POST['toggleSwitch'] == 'on'){
-		$toggleStatus = true;
+	$toggleStatusNotif = false;
+	$toggleStatusProfile = false;
+	if (isset($_POST['toggleSwitch']) && $_POST['toggleSwitch'] == 'on'){
+		$toggleStatusNotif = true;
+	}
+	if (isset($_POST['toggleProfile']) && $_POST['toggleProfile'] == 'on'){
+		$toggleStatusProfile = true;
 	}
 	if (isset($_POST['username']) && $_POST['username'] != $username)
 	{
@@ -43,8 +48,11 @@ if (isset($_POST['toggleSwitch']) && $_POST['toggleSwitch'] == 'on'){
 		}
 		$db->changePassword($_POST['password'], $_SESSION["userID"]);
 	}
-	if ($notifs != $toggleStatus){
+	if ($notifs != $toggleStatusNotif){
 		$db->changeNotifStatus($_SESSION["userID"]);
+	}
+	if ($profile != $toggleStatusProfile){
+		$db->changeProfileStatus($_SESSION["userID"]);
 	}
 	header("Location: menu.php");
 	exit();
@@ -91,7 +99,13 @@ if (isset($_SESSION['success_message'])) {
 				<span class="switch-label">Mail notifications</span>
 				<label class="switch">
 					<input type="checkbox" id="toggleSwitch"  name="toggleSwitch" <?php if($notifs) echo 'checked'; ?>>
-					<!-- <input type="checkbox" id="toggleSwitch"  name="toggleSwitch" checked> -->
+					<span class="slider"></span>
+				</label>
+			</div>
+			<div class="switch-with-text">
+				<span class="switch-label">Private profile</span>
+				<label class="switch">
+					<input type="checkbox" id="toggleProfile"  name="toggleProfile" <?php if($profile) echo 'checked'; ?>>
 					<span class="slider"></span>
 				</label>
 			</div>

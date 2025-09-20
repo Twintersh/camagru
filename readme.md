@@ -19,4 +19,4 @@ BONUS
 [X] Live preview of webcam
 [X] Render GIF
 [X] Infinite scroll
-[ ] Private profile
+[X] Private profile

@@ -168,6 +168,20 @@ class DatabaseManager {
 		return $pictures;
 	}
 
+	function getLastPublicPictures() {
+    $pictures = $this->execSqlQuery(
+        "SELECT p.*
+         FROM pictures p
+         INNER JOIN users u ON p.authorID = u.id
+         WHERE u.privateprof = FALSE
+         ORDER BY p.created_at DESC
+         LIMIT 10 OFFSET 0",
+        []
+    );
+
+    return $pictures;
+}
+
 	function getLikesNb($photo_url){
 		$likes = $this->execSqlQuery("SELECT likes FROM pictures WHERE photo_url = ?", [$photo_url]);
 		if (is_array($likes) && isset($likes[0]['likes'])) {
@@ -240,6 +254,25 @@ class DatabaseManager {
 			"SELECT * FROM pictures ORDER BY created_at DESC LIMIT :limit OFFSET :offset",
 			[':limit' => $limit, ':offset' => $offset]
 		);
+		return $pictures;
+	}
+
+	function getPaginatedPublicPictures($page, $limit = 10) {
+		$offset = ($page + 1) * $limit;
+
+		$pictures = $this->execSqlQuery(
+			"SELECT p.*
+			FROM pictures p
+			INNER JOIN users u ON p.authorID = u.id
+			WHERE u.privateprof = FALSE
+			ORDER BY p.created_at DESC
+			LIMIT :limit OFFSET :offset",
+			[
+				':limit' => $limit,
+				':offset' => $offset
+			]
+		);
+
 		return $pictures;
 	}
 
@@ -322,6 +355,21 @@ class DatabaseManager {
 		$data = $this->execSqlQuery("UPDATE users SET password = ? WHERE id = ?", [$hashedPass, $userId]);
 		return $data;
 	}
+
+	function checkProfileStatus($userID){
+		$profile = $this->execSqlQuery("SELECT privateprof FROM users WHERE id = ?", [$userID]);
+		if (gettype($profile) == "array" && count($profile) > 0 && gettype($profile[0]) == "array" && count($profile[0]) > 0 && isset($profile[0]['privateprof'])){
+			return $profile[0]['privateprof'];
+		}
+		return $profile;
+	}
+
+	function changeProfileStatus($userID){
+		$isTrue = $this->checkProfileStatus($userID);
+		$this->execSqlQuery("UPDATE users SET privateprof = ? WHERE id = ?", [(int)!$isTrue, $userID]);
+		return $this->checkProfileStatus($userID);
+	}
+
 }
 
 

@@ -2,7 +2,7 @@
 	require(__DIR__ . '/config.php');
 
 	$db = new DatabaseManager;
-	$pictures = $db->getLastPictures();
+	$pictures = $db->getLastPublicPictures();
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@
 		loading = true;
 		document.getElementById("loader").style.display = "block";
 
-		fetch("load_more.php?page=" + page)
+		fetch("load_more_unlogged.php?page=" + page)
 			.then(response => response.text())
 			.then(data => {
 			document.getElementById("feed-container").insertAdjacentHTML('beforeend', data);
